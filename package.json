@@ -1,0 +1,10 @@
+{
+  "name": "myteam",
+  "version": "0.0.1",
+  "description": "MyTeam App",
+  "scripts": {
+    "start": "node app.js"
+  },
+  "author": "Michael",
+  "license": "GPL-3.0"
+}
