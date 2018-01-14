@@ -1,2 +1,4 @@
 ideas/
 *.log
+node_modules/
+init_localenvironment.bat
