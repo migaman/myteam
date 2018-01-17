@@ -1,55 +1,46 @@
-'use strict';
+var express = require('express');
+var path = require('path');
+var favicon = require('serve-favicon');
+var logger = require('morgan');
+var cookieParser = require('cookie-parser');
+var bodyParser = require('body-parser');
 
-var http = require('http');
+var index = require('./routes/index');
+var users = require('./routes/users');
 
-const PORT = process.env.PORT;
+var app = express();
 
-//Needs feature Dyno Metadata (https://stackoverflow.com/questions/7917523/how-do-i-access-the-current-heroku-release-version-programmatically)
-const VERSION = process.env.HEROKU_RELEASE_VERSION;
+// view engine setup
+app.set('views', path.join(__dirname, 'views'));
+app.set('view engine', 'jade');
 
-const pg = require('pg');
+// uncomment after placing your favicon in /public
+//app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
+app.use(logger('dev'));
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: false }));
+app.use(cookieParser());
+app.use(express.static(path.join(__dirname, 'public')));
 
-http.createServer(function (req, res) {
-	console.log("great!");
-	
-    res.writeHead(200, {'Content-Type': 'text/html'});
-    //res.write('aaaa');
-	
-	//Read some records from database
-	getExampleDBValues();
-	
-	res.end('Hello World! Release: ' + VERSION);
-	
-	
-}).listen(PORT); 
+app.use('/', index);
+app.use('/users', users);
 
+// catch 404 and forward to error handler
+app.use(function(req, res, next) {
+  var err = new Error('Not Found');
+  err.status = 404;
+  next(err);
+});
 
+// error handler
+app.use(function(err, req, res, next) {
+  // set locals, only providing error in development
+  res.locals.message = err.message;
+  res.locals.error = req.app.get('env') === 'development' ? err : {};
 
-function getExampleDBValues() {
-	var values = "test";
-	var pgClient = new pg.Client({
-	  connectionString: process.env.DATABASE_URL,
-	  ssl: true,
-	});
+  // render the error page
+  res.status(err.status || 500);
+  res.render('error');
+});
 
-	pgClient.connect();
-	
-	var sql = "SELECT e.exampletext FROM mt_example e";
-		
-	pgClient.query(sql, (err, res) => {
-		if (err) throw err;
-		var answer = "";
-		for (let row of res.rows) {
-			answer += row.exampletext + "; ";
-			console.log('DB value: ' + row.exampletext);
-		}
-		pgClient.end();
-		
-		
-	});
-	
-	
-	return values;
-}
-
-
+module.exports = app;
