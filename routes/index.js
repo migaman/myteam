@@ -11,6 +11,11 @@ router.get('/helloworld', function(req, res) {
     res.render('helloworld', { title: 'Hello, World!', user: 'hans' });
 });
 
+/* GET REST Example-page. */
+router.get('/rest', function(req, res) {
+    res.render('rest', { title: 'Hello, World!', user: 'hans' });
+});
+
 /* GET examplelist page. */
 router.get('/examplelist', function(req, res) {
     
