@@ -1,0 +1,28 @@
+version: '3.4'
+services:
+  web:
+    build: .
+    #Mount paths between the host and the container.
+    volumes:
+      #This will mount the root directory to our working directory in the container.
+      - .:/usr/src/app/
+      #This will mount the node_modules directory to the host machine using the buildtime directory
+      - /usr/src/app/node_modules
+    ports:
+      - "3000:3000"
+    depends_on:
+      - postgres
+    environment:
+      PORT: 3000
+      DATABASE_URL: postgres://postgres:postgre23@postgres/myteam?ssl=false
+      HEROKU_RELEASE_VERSION: 0
+    command: [ "npm", "start" ]
+  postgres:
+    build: ./d-postgresql/
+    ports: 
+      #Make DB accessible on hosts port
+      - "5433:5432"
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgre23
+      POSTGRES_DB: myteam
