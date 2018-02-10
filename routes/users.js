@@ -5,7 +5,6 @@ var router = express.Router();
  * GET userlist.
  */
 router.get('/userlist', function(req, res) {
-    
 	/*var db = req.db;
     var collection = db.get('userlist');
     collection.find({},{},function(e,docs){
@@ -15,13 +14,11 @@ router.get('/userlist', function(req, res) {
 	var pg = req.pg;
 	
 	var pgClient = new pg.Client({
-	  connectionString: process.env.DATABASE_URL,
-	  ssl: true,
+	  connectionString: process.env.DATABASE_URL
 	});
-	
-    
+	   
 	pgClient.connect();
-	
+		
 	var sql = "SELECT array_to_json(array_agg(t)) FROM mt_example t";
 		
 	pgClient.query(sql, (err, pgRes) => {
@@ -54,8 +51,7 @@ router.post('/adduser', function(req, res) {
 	
 	var pg = req.pg;
 	var pgClient = new pg.Client({
-	  connectionString: process.env.DATABASE_URL,
-	  ssl: true,
+	  connectionString: process.env.DATABASE_URL
 	});
 	
 	pgClient.connect();
@@ -100,8 +96,7 @@ router.delete('/deleteuser/:id', function(req, res) {
 	
 	var pg = req.pg;
 	var pgClient = new pg.Client({
-	  connectionString: process.env.DATABASE_URL,
-	  ssl: true,
+	  connectionString: process.env.DATABASE_URL
 	});
 	
 	pgClient.connect();

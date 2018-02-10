@@ -18,15 +18,14 @@ router.get('/rest', function(req, res) {
 
 /* GET examplelist page. */
 router.get('/examplelist', function(req, res) {
-    
 	var pg = req.pg;
 	
-	var pgClient = new pg.Client({
-	  connectionString: process.env.DATABASE_URL,
-	  ssl: true,
-	});
 	
-    
+	
+	var pgClient = new pg.Client({
+	  connectionString: process.env.DATABASE_URL
+	});
+	    
 	pgClient.connect();
 	
 	var sql = "SELECT e.exampletext FROM mt_example e";
@@ -36,8 +35,7 @@ router.get('/examplelist', function(req, res) {
 		var answer = "";
 		for (let row of pgRes.rows) {
 			answer += row.exampletext + "; ";
-		}
-		
+		}		
 		res.render('examplelist', { "answer": answer });
 		
 		pgClient.end();
@@ -62,8 +60,7 @@ router.post('/addexample', function(req, res) {
 
 	
 	var pgClient = new pg.Client({
-	  connectionString: process.env.DATABASE_URL,
-	  ssl: true,
+	  connectionString: process.env.DATABASE_URL
 	});
 	
 	
