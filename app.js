@@ -4,6 +4,7 @@ var favicon = require('serve-favicon');
 var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
+var fs = require('fs')
 //Postgres
 const pg = require('pg');
 
@@ -23,7 +24,12 @@ app.set('view engine', 'jade');
 
 // uncomment after placing your favicon in /public
 //app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
-app.use(logger('dev'));
+//express should log via morgan
+// create a write stream (in append mode)
+var logStream = fs.createWriteStream(path.join(__dirname, 'myteam.log'), {flags: 'a'})
+// setup the logger
+app.use(logger('common', {stream: logStream}))
+
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
