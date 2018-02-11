@@ -4,6 +4,8 @@ Example Node.js project
 
 ## Status
 [![Build Status](https://travis-ci.org/migaman/myteam.svg?branch=master)](https://travis-ci.org/migaman/myteam)
+[![dependencies](https://david-dm.org/migaman/myteam/status.svg)](https://david-dm.org/migaman/myteam)
+[![devDependencies](https://david-dm.org/migaman/myteam/dev-status.svg)](https://david-dm.org/migaman/myteam?type=dev)
 
 ## Live Demo
 https://myteams.herokuapp.com
