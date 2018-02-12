@@ -1,12 +1,16 @@
 var express = require('express');
 var path = require('path');
 var favicon = require('serve-favicon');
-var logger = require('morgan');
+var log4js = require('log4js');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 var fs = require('fs')
 //Postgres
 const pg = require('pg');
+
+//Logging
+var log = log4js.getLogger("app");
+
 
 //Needs feature Dyno Metadata (https://stackoverflow.com/questions/7917523/how-do-i-access-the-current-heroku-release-version-programmatically)
 const VERSION = process.env.HEROKU_RELEASE_VERSION;
@@ -24,11 +28,8 @@ app.set('view engine', 'jade');
 
 // uncomment after placing your favicon in /public
 //app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
-//express should log via morgan
-// create a write stream (in append mode)
-var logStream = fs.createWriteStream(path.join(__dirname, 'myteam.log'), {flags: 'a'})
 // setup the logger
-app.use(logger('common', {stream: logStream}))
+app.use(log4js.connectLogger(log4js.getLogger("http"), { level: 'debug' }));
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
@@ -38,10 +39,6 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 // Make our db accessible to our router
 app.use(function(req,res,next){
-
-	
-
-
     req.pg = pg;
     next();
 });
@@ -54,12 +51,14 @@ app.use('/teams', teams);
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
   var err = new Error('Not Found');
+  log.error("Something went wrong:", err);
   err.status = 404;
   next(err);
 });
 
 // error handler
 app.use(function(err, req, res, next) {
+  log.error("Something went wrong:", err);
   // set locals, only providing error in development
   res.locals.message = err.message;
   res.locals.error = req.app.get('env') === 'development' ? err : {};
@@ -70,3 +69,4 @@ app.use(function(err, req, res, next) {
 });
 
 module.exports = app;
+

@@ -1,13 +1,17 @@
 var express = require('express');
 var router = express.Router();
+var log = require('log4js').getLogger("index");
+
 
 /* GET home page. */
 router.get('/', function(req, res, next) {
+  log.debug("This is in the index module");
   res.render('index', { title: 'Express' });
 });
 
 /* GET Hello World page. */
 router.get('/helloworld', function(req, res) {
+	log.debug("This is in the helloworld module");
     res.render('helloworld', { title: 'Hello, World!', user: 'hans' });
 });
 
