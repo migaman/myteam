@@ -5,7 +5,7 @@
   "description": "MyTeam App",
   "scripts": {
     "start": "node ./bin/www",
-    "test": "mocha --exit"
+    "test": "node nightwatch.js --env unit && node nightwatch.js --env e2e"
   },
   "author": "Michael",
   "license": "GPL-3.0",
