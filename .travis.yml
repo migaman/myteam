@@ -12,4 +12,4 @@ addons:
     packages:
     - google-chrome-stable
 before_script:
- - npm start
+ - npm start &
