@@ -27,7 +27,7 @@ const config = { // we use a nightwatch.conf.js file so we can include comments 
 	  //"launch_url": process.env.SAUCE_USERNAME + ":" + process.env.SAUCE_ACCESS_KEY + "@localhost:4445",
 	  //"launch_url": "https://ondemand.saucelabs.com:443/wd/hub",
 	  //"launch_url": "https://myteams.herokuapp.com/",
-	  "launch_url" : "http://" + process.env.SAUCE_USERNAME + ":" + process.env.SAUCE_ACCESS_KEY + "@ondemand.saucelabs.com/wd/hub"
+	  "launch_url" : "http://" + process.env.SAUCE_USERNAME + ":" + process.env.SAUCE_ACCESS_KEY + "@ondemand.saucelabs.com/wd/hub",
       "selenium_port": 80,
       "selenium_host": "ondemand.saucelabs.com",
       "silent": true,
