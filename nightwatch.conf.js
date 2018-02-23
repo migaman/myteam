@@ -22,9 +22,10 @@ const config = { // we use a nightwatch.conf.js file so we can include comments 
   "test_workers" : {"enabled" : true, "workers" : "auto"}, // perform tests in parallel where possible
   
   "test_settings": {
-    "saucelabs": {
+    "e2e_saucelabs": {
       //"launch_url": "http://ondemand.saucelabs.com:80", // we're testing a local site on Saucelabs
-	  "launch_url": process.env.SAUCE_USERNAME + ":" + process.env.SAUCE_ACCESS_KEY + "@localhost:4445",
+	  //"launch_url": process.env.SAUCE_USERNAME + ":" + process.env.SAUCE_ACCESS_KEY + "@localhost:4445",
+	  "launch_url": "http://localhost",
       "selenium_port": 80,
       "selenium_host": "ondemand.saucelabs.com",
       "silent": true,
@@ -44,7 +45,7 @@ const config = { // we use a nightwatch.conf.js file so we can include comments 
 	  "filter" : "./test/e2e/*",
       "exclude" : "./test/unit/*"
     },
-    "e2e": {
+    "e2e_local": {
       "launch_url": "http://localhost:3000",
       "selenium_port": 4444,
       "selenium_host": "127.0.0.1",

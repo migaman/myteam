@@ -5,7 +5,7 @@
   "description": "MyTeam App",
   "scripts": {
     "start": "node ./bin/www",
-    "test": "node nightwatch.js --env unit && node nightwatch.js --env saucelabs"
+    "test": "node nightwatch.js --env unit && node nightwatch.js --env e2e_saucelabs"
   },
   "author": "Michael",
   "license": "GPL-3.0",

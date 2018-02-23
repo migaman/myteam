@@ -16,6 +16,9 @@ module.exports = {
 	.pause(1000);
 	client.assert.title("Express")
 	client.assert.visible("body > h1")
+	client.assert.visible("body > p")
+	client.assert.containsText("body > h1", "Express");
+	client.assert.containsText("body > p", "Welcome to Express");
   },
 
   after : function(client) {
