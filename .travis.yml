@@ -11,5 +11,3 @@ addons:
     - google-chrome-stable
 before_script:
  - node bin/wwww > /dev/null 2>&1 &
-script:
- - xvfb-run wct --skip-plugin sauce
