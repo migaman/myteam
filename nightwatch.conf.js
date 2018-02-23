@@ -25,7 +25,7 @@ const config = { // we use a nightwatch.conf.js file so we can include comments 
     "e2e_saucelabs": {
       //"launch_url": "http://ondemand.saucelabs.com:80", // we're testing a local site on Saucelabs
 	  //"launch_url": process.env.SAUCE_USERNAME + ":" + process.env.SAUCE_ACCESS_KEY + "@localhost:4445",
-	  "launch_url": "http://ondemand.saucelabs.com/wd/hub",
+	  "launch_url": "https://ondemand.saucelabs.com:443/wd/hub",
       "selenium_port": 80,
       "selenium_host": "ondemand.saucelabs.com",
       "silent": true,
