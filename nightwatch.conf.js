@@ -23,7 +23,8 @@ const config = { // we use a nightwatch.conf.js file so we can include comments 
   
   "test_settings": {
     "saucelabs": {
-      "launch_url": "http://ondemand.saucelabs.com:80", // we're testing a local site on Saucelabs
+      //"launch_url": "http://ondemand.saucelabs.com:80", // we're testing a local site on Saucelabs
+	  "launch_url": process.env.SAUCE_USERNAME + ":" + process.env.SAUCE_ACCESS_KEY + "@localhost:4445",
       "selenium_port": 80,
       "selenium_host": "ondemand.saucelabs.com",
       "silent": true,
@@ -39,7 +40,9 @@ const config = { // we use a nightwatch.conf.js file so we can include comments 
       "desiredCapabilities": {
 				"tunnel-identifier": process.env.TRAVIS_JOB_NUMBER, // needed for sauce-connect, i.e for testing localhost on saucelabs
 			  build: `build-${process.env.TRAVIS_JOB_NUMBER}` // needed for sauce-connect
-			}
+			},
+	  "filter" : "./test/e2e/*",
+      "exclude" : "./test/unit/*"
     },
     "e2e": {
       "launch_url": "http://localhost:3000",
