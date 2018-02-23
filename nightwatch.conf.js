@@ -10,14 +10,19 @@ const config = { // we use a nightwatch.conf.js file so we can include comments 
   ],
   "output_folder": "./node_modules/nightwatch/reports", // reports (test outcome) output by Nightwatch
   "selenium": {
-    "start_process": true,
-    "server_path": seleniumServer.path,
-    "log_path": "",
-    "host": "127.0.0.1",
-    "port": 4444,
-    "cli_args": {
-      "webdriver.chrome.driver" : chromedriver.path
+    
+	"start_process" : true,
+    "server_path" : "./bin/selenium-server-standalone-3.9.1.jar",
+    "log_path" : "",
+    "host" : "127.0.0.1",
+    "port" : 4444,
+    "cli_args" : {
+      "webdriver.chrome.driver" : "",
+      "webdriver.gecko.driver" : "",
+      "webdriver.edge.driver" : ""
     }
+	
+	
   },
   "test_workers" : {"enabled" : true, "workers" : "auto"}, // perform tests in parallel where possible
   
