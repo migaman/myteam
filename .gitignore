@@ -1,7 +1,12 @@
-ideas/
-reports/
+# Logs
+logs
 *.log
+
+# Dependency directories
 node_modules/
-init.bat
-init_localenvironment.bat
-*.env
+
+# dotenv environment variables file
+.env
+
+ideas/
+
