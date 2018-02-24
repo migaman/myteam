@@ -7,11 +7,6 @@ cache:
     - node_modules
 addons:
   firefox: "55.0"
-  apt:
-    sources:
-    - google-chrome
-    packages:
-    - google-chrome-stable
 env:
 before_install:
   - wget https://github.com/mozilla/geckodriver/releases/download/v0.19.1/geckodriver-v0.19.1-linux64.tar.gz 
@@ -23,4 +18,4 @@ before_install:
   - firefox --version
   - geckodriver --version
 before_script:
-  - npm start
+  - npm start &
