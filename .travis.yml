@@ -5,6 +5,8 @@ sudo: false
 cache:
   directories:
     - node_modules
+services:
+ - postgresql
 addons:
   firefox: "55.0"
 env:
@@ -17,5 +19,9 @@ before_install:
   - sh -e /etc/init.d/xvfb start || true
   - firefox --version
   - geckodriver --version
+  - sleep 3
 before_script:
+  - psql -c "CREATE DATABASE myteam;" -U postgres
+  - psql -c "CREATE USER foo WITH PASSWORD 'bar';" -U postgres
+  - sleep 3
   - npm start &
