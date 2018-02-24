@@ -20,6 +20,8 @@ https://myteams.herokuapp.com
 - [Docker](https://www.docker.com/) 			Easy running of the app inside a container
 - [Travis CI](https://travis-ci.org/) 			Continous Integration Service
 - [Express](http://expressjs.com/) 				Minimalist web framework for Node.js
+- [env2](https://github.com/dwyl/env2)			Simple environment variable loader for Node.js 
+- [log4js](https://github.com/log4js-node/log4js-node)	Logging Framework for Node.js
 
 
 
