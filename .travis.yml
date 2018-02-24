@@ -22,6 +22,6 @@ before_install:
   - sleep 3
 before_script:
   - psql -c "CREATE DATABASE myteam;" -U postgres
-  - psql -U postgres -d myteam -a -f ./script/example.sql
+  - psql -U postgres -d myteam -a -f ./scripts/example.sql
   - sleep 3
   - npm start &
