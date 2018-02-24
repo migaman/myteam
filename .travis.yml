@@ -18,5 +18,9 @@ before_install:
   - mkdir geckodriver
   - tar -xzf geckodriver*.tar.gz -C geckodriver
   - export PATH=$PATH:$PWD/geckodriver
+  - export DISPLAY=:99.0
+  - sh -e /etc/init.d/xvfb start || true
+  - firefox --version
+  - geckodriver --version
 before_script:
   - node bin/wwww > /dev/null 2>&1 &
