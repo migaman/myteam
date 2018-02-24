@@ -1,13 +1,18 @@
 'use strict';
 const {Builder, By, until, promise} = require('selenium-webdriver');
 var assert = require('assert');
+const firefox = require('selenium-webdriver/firefox');
 
 describe('samplee2etest', function(){
 	this.timeout(15000);
 	let driver;
 	
 	beforeEach(async function() {
-		driver = await new Builder().forBrowser('firefox').build();
+	
+		driver = await new Builder()
+			.forBrowser('firefox')
+			.setFirefoxOptions(new firefox.Options().headless())
+			.build();
 	  });
 	  
 	  afterEach(async function() {
