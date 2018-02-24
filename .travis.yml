@@ -23,4 +23,4 @@ before_install:
   - firefox --version
   - geckodriver --version
 before_script:
-  - node bin/wwww > /dev/null 2>&1 &
+  - npm start
