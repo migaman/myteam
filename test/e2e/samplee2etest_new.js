@@ -7,7 +7,7 @@ describe('samplee2etest', function(){
 	let driver;
 	
 	beforeEach(async function() {
-		driver = await new Builder().forBrowser('firefox').build();
+		driver = await new Builder().forBrowser('chrome').build();
 	  });
 	  
 	  afterEach(async function() {
