@@ -62,6 +62,9 @@ describe('samplee2etest', function(){
 				var passed = (currentTest.state === 'passed') ? true : false;
 				saucelabs.updateJob(driver.sessionID, { name: currentTest.title, passed: passed }, done);
 			}
+			else {
+				done();
+			}
             
         });
     });
