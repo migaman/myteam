@@ -5,8 +5,8 @@ const firefox = require('selenium-webdriver/firefox');
 const SauceLabs  = require("saucelabs");
 
 describe('samplee2etest', function(){
-	let driver;
-	let saucelabs;
+	var driver;
+	var saucelabs;
 	beforeEach(async function() {
 		if (process.env.SAUCE_USERNAME != undefined) {
 			 saucelabs = new SauceLabs({
@@ -78,17 +78,16 @@ describe('samplee2etest', function(){
 		await driver.findElement(By.css('body > h1'));
 		
 		await driver.get("http://localhost:3000");
-		let url = await driver.getCurrentUrl();
+		var url = await driver.getCurrentUrl();
 		assert.equal(url, "http://localhost:3000/");
 		  
-		  
-		let title = await driver.getTitle();
+		var title = await driver.getTitle();
 		assert.equal(title, "Express");
 		
-		let titleH1 = await driver.findElement(By.css('body > h1')).getText();
+		var titleH1 = await driver.findElement(By.css('body > h1')).getText();
 		assert.equal(titleH1, "Express");
 		
-		let welcome = await driver.findElement(By.css('body > p')).getText();
+		var welcome = await driver.findElement(By.css('body > p')).getText();
 		assert.equal(welcome, "Welcome to Express");
 		
 	
