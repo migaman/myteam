@@ -4,7 +4,7 @@ var assert = require('assert');
 const firefox = require('selenium-webdriver/firefox');
 
 describe('samplee2etest', function(){
-	this.timeout(10000);
+	//this.timeout(10000);
 	let driver;
 	
 	beforeEach(async function() {
