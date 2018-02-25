@@ -4,27 +4,19 @@ var assert = require('assert');
 const firefox = require('selenium-webdriver/firefox');
 
 describe('samplee2etest', function(){
-	//this.timeout(10000);
 	let driver;
-	
 	beforeEach(async function() {
-		/*
-		driver = await new Builder()
-			.withCapabilities({
-			browserName: "firefox"
-			
-		}).build();
-		*/
 		if (process.env.SAUCE_USERNAME != undefined) {
 			
 			 driver = new Builder()
 				.usingServer('http://'+ process.env.SAUCE_USERNAME+':'+process.env.SAUCE_ACCESS_KEY+'@ondemand.saucelabs.com:80/wd/hub')
 				.withCapabilities({
-				'tunnel-identifier': process.env.TRAVIS_JOB_NUMBER,
-				build: process.env.TRAVIS_BUILD_NUMBER,
-				username: process.env.SAUCE_USERNAME,
-				accessKey: process.env.SAUCE_ACCESS_KEY,
-				browserName: "chrome"
+					'tunnel-identifier': process.env.TRAVIS_JOB_NUMBER,
+					build: process.env.TRAVIS_BUILD_NUMBER,
+					username: process.env.SAUCE_USERNAME,
+					accessKey: process.env.SAUCE_ACCESS_KEY,
+					browserName: "chrome",
+					name: this.currentTest.title
 			}).build();
 			
 		}
@@ -40,7 +32,7 @@ describe('samplee2etest', function(){
 		await driver.quit();
 	});
 	
-	it('demo', async function() {
+	it('bodytest', async function() {
 		var application_host = 'http://localhost:3000';
 				
 		await driver.get(application_host);
