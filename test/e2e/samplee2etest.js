@@ -2,14 +2,20 @@
 const {Builder, By, until, promise} = require('selenium-webdriver');
 var assert = require('assert');
 const firefox = require('selenium-webdriver/firefox');
+const SauceLabs  = require("saucelabs");
 
 describe('samplee2etest', function(){
 	let driver;
+	let saucelabs;
 	beforeEach(async function() {
 		if (process.env.SAUCE_USERNAME != undefined) {
-			
+			 saucelabs = new SauceLabs({
+					username: process.env.SAUCE_USERNAME,
+					password: process.env.SAUCE_ACCESS_KEY
+			});
+		
 			 driver = new Builder()
-				.usingServer('http://'+ process.env.SAUCE_USERNAME+':'+process.env.SAUCE_ACCESS_KEY+'@ondemand.saucelabs.com:80/wd/hub')
+				.usingServer('http://' + process.env.SAUCE_USERNAME + ':' + process.env.SAUCE_ACCESS_KEY + '@ondemand.saucelabs.com:80/wd/hub')
 				.withCapabilities({
 					'tunnel-identifier': process.env.TRAVIS_JOB_NUMBER,
 					build: process.env.TRAVIS_BUILD_NUMBER,
@@ -18,6 +24,10 @@ describe('samplee2etest', function(){
 					browserName: "chrome",
 					name: this.currentTest.title
 			}).build();
+			
+			driver.getSession().then(function(sessionid) {
+					driver.sessionID = sessionid.id_;
+			});
 			
 		}
 		else {
@@ -28,9 +38,33 @@ describe('samplee2etest', function(){
 		}
 	  });
 	  
-	  afterEach(async function() {
+	  /*afterEach(async function() {
+		var passed = (this.currentTest.state === 'passed') ? true : false;
+		console.log("passed " + passed);
+		
+		
+		saucelabs.updateJob(driver.sessionID, {
+			  passed: passed
+		}, done);
+		saucelabs.updateJob(driver.sessionID, {
+			  passed: passed
+			});
+		console.log("SauceOnDemandSessionID=" + driver.sessionID +" job-name=" + this.currentTest.title);
+		
 		await driver.quit();
-	});
+	});*/
+	
+	afterEach(function(done) {
+		var currentTest = this.currentTest;
+		var sauceLabsActive = process.env.SAUCE_USERNAME != undefined;
+        driver.quit().then (function (){
+			if (sauceLabsActive) {
+				var passed = (currentTest.state === 'passed') ? true : false;
+				saucelabs.updateJob(driver.sessionID, { name: currentTest.title, passed: passed }, done);
+			}
+            
+        });
+    });
 	
 	it('bodytest', async function() {
 		var application_host = 'http://localhost:3000';
