@@ -15,7 +15,6 @@ before_install:
   - mkdir geckodriver
   - tar -xzf geckodriver*.tar.gz -C geckodriver
   - export PATH=$PATH:$PWD/geckodriver
-  - export DISPLAY=:99.0
   - sh -e /etc/init.d/xvfb start || true
 before_script:
   - psql -c "CREATE DATABASE myteam;" -U postgres
