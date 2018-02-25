@@ -8,11 +8,32 @@ describe('samplee2etest', function(){
 	let driver;
 	
 	beforeEach(async function() {
-	
+		/*
 		driver = await new Builder()
-			.forBrowser('firefox')
-			.setFirefoxOptions(new firefox.Options().headless())
-			.build();
+			.withCapabilities({
+			browserName: "firefox"
+			
+		}).build();
+		*/
+		if (process.env.SAUCE_USERNAME != undefined) {
+			
+			 driver = new Builder()
+				.usingServer('http://'+ process.env.SAUCE_USERNAME+':'+process.env.SAUCE_ACCESS_KEY+'@ondemand.saucelabs.com:80/wd/hub')
+				.withCapabilities({
+				'tunnel-identifier': process.env.TRAVIS_JOB_NUMBER,
+				build: process.env.TRAVIS_BUILD_NUMBER,
+				username: process.env.SAUCE_USERNAME,
+				accessKey: process.env.SAUCE_ACCESS_KEY,
+				browserName: "chrome"
+			}).build();
+			
+		}
+		else {
+			driver = await new Builder()
+				.forBrowser('firefox')
+				.setFirefoxOptions(new firefox.Options().headless())
+				.build();
+		}
 	  });
 	  
 	  afterEach(async function() {
