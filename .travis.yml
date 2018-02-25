@@ -1,7 +1,11 @@
 language: node_js
 node_js:
  - "node"
+
+# Container-based fast boot time environment in which sudo commands are not available
+# https://docs.travis-ci.com/user/reference/overview/
 sudo: false
+
 cache:
   directories:
     - node_modules
