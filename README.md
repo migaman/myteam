@@ -25,3 +25,4 @@ https://myteams.herokuapp.com
 - [pug](https://github.com/pugjs/pug)			Template engine for Node.js
 - [FontAwesome](https://github.com/FortAwesome/Font-Awesome)	Icon toolkit 
 - [Bootstrap](https://github.com/twbs/bootstrap)	Front-End library for designing responsive web applications
+- [jQuery](https://github.com/jquery/jquery)	JavaScript Library
