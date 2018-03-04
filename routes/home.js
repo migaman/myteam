@@ -6,7 +6,9 @@ var log = require('log4js').getLogger("index");
 /* GET home page. */
 router.get('/', function(req, res, next) {
   log.debug("This is in the index module");
-  res.render('index', { title: 'Express' });
+  res.render('home', { 
+	title: 'Home' 
+  });
 });
 
 /* GET Hello World page. */
