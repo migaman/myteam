@@ -1,6 +1,6 @@
 # myteam
 
-Example Node.js project
+Example Node.js project built on [hackathon-starter boilerplate](https://github.com/sahat/hackathon-starter).
 
 ## Status
 [![Build Status](https://travis-ci.org/migaman/myteam.svg?branch=master)](https://travis-ci.org/migaman/myteam)
