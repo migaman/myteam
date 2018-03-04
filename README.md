@@ -22,13 +22,4 @@ https://myteams.herokuapp.com
 - [Express](http://expressjs.com/) 				Minimalist web framework for Node.js
 - [env2](https://github.com/dwyl/env2)			Simple environment variable loader for Node.js 
 - [log4js](https://github.com/log4js-node/log4js-node)	Logging Framework for Node.js
-
-
-
-
-
-
-
-
-
-
+- [pug](https://github.com/pugjs/pug)			Template engine for Node.js
