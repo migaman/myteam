@@ -5,6 +5,9 @@ logs
 # Dependency directories
 node_modules/
 
+#Build
+public/css/main.css
+
 # dotenv environment variables file
 .env
 
