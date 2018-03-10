@@ -10,6 +10,8 @@ const LinkedInStrategy = require('passport-linkedin-oauth2').Strategy;
 const OpenIDStrategy = require('passport-openid').Strategy;
 const OAuthStrategy = require('passport-oauth').OAuthStrategy;
 const OAuth2Strategy = require('passport-oauth').OAuth2Strategy;
+const pg = require('pg');
+const bcrypt = require('bcrypt-nodejs');
 
 const User = require('../models/User');
 
@@ -27,6 +29,53 @@ passport.deserializeUser((id, done) => {
  * Sign in using Email and Password.
  */
 passport.use(new LocalStrategy({ usernameField: 'email' }, (email, password, done) => {
+  
+  var pgClient = new pg.Client({
+	  connectionString: process.env.DATABASE_URL
+	});
+  
+  pgClient.connect();
+  var sql = "SELECT idaccount, email, password FROM mt_account a WHERE email = $1";
+  pgClient.query(sql,[email.toLowerCase()], (err, pgRes) => {
+    if (err) { return done(err); }
+	if (!pgRes.rowCount) {
+		return done(null, false, { msg: `Email ${email} not found.` });
+	}
+	else {
+    const user = new User({
+      email: pgRes.rows[0].email,
+      password: pgRes.rows[0].password
+    });
+
+		
+		
+		bcrypt.compare(password, user.password, (err, isMatch) => {
+      if (err) { 
+        return done(err); 
+      }
+
+			if (isMatch) {
+				return done(null, user);
+			}
+			return done(null, false, { msg: 'Invalid email or password.' });
+		 });
+		
+		/*user.comparePassword(password, (err, isMatch) => {
+		  if (err) { return done(err); }
+		  if (isMatch) {
+			return done(null, user);
+		  }
+		  return done(null, false, { msg: 'Invalid email or password.' });
+		});*/
+	
+	}
+	
+	
+	
+	
+  });
+  
+  /*
   User.findOne({ email: email.toLowerCase() }, (err, user) => {
     if (err) { return done(err); }
     if (!user) {
@@ -40,6 +89,7 @@ passport.use(new LocalStrategy({ usernameField: 'email' }, (email, password, don
       return done(null, false, { msg: 'Invalid email or password.' });
     });
   });
+  */
 }));
 
 /**

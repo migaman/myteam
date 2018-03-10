@@ -3,6 +3,7 @@ const crypto = bluebird.promisifyAll(require('crypto'));
 const nodemailer = require('nodemailer');
 const passport = require('passport');
 const User = require('../models/User');
+const bcrypt = require('bcrypt-nodejs');
 
 /**
  * GET /login
@@ -86,13 +87,92 @@ exports.postSignup = (req, res, next) => {
     return res.redirect('/signup');
   }
 
-  const user = new User({
-    email: req.body.email,
-    password: req.body.password
-  });
+  
+  // Get our form values. These rely on the "name" attributes
+  var email = req.body.email;
+  var password = req.body.password;
+  var pg = req.pg;
+  var pgClient = new pg.Client({
+	  connectionString: process.env.DATABASE_URL
+	});
+	   
+  pgClient.connect();
+  var sql = "SELECT * FROM mt_account a WHERE email = $1";
+  pgClient.query(sql,[email], (err, pgRes) => {
+    if (err) {
+	  throw err;
+	}
+	
+	if (pgRes.rowCount) {
+		console.log("existing user" + pgRes);
+		console.log("userid: " + pgRes.rows[0].idaccount);
+		req.flash('errors', { msg: 'Account with that email address already exists.' });
+		pgClient.end();
+		return res.redirect('/signup');
+		
+		/*
+		var firstRow = pgRes.rows[0];
+		for(var columnName in firstRow) {
+			console.log('column "%s" has a value of "%j"', columnName, firstRow[columnName]);
+		}
+		*/
+	}
+	else {
+		console.log("user not found.. save user");
+    
+    bcrypt.genSalt(10, (err, salt) => {
+      if (err) 
+      { 
+        return next(err); 
+      }
+      bcrypt.hash(password, salt, null, (err, hash) => {
+        if (err) 
+        { 
+          return next(err); 
+        }
+        
+        var sql = "INSERT INTO mt_account(email, password) VALUES ($1, $2)";
+        console.log("password: " + password);
+        console.log("hash password: " + hash);
+        console.log("salt: " + salt);
+    
+        pgClient.query(sql,[email, hash], (err, pgRes) => {
+          if (err) { 
+            return next(err); 
+          }
+          
+          const user = new User({
+            email: req.body.email,
+            password: req.body.password
+          });
 
-  User.findOne({ email: req.body.email }, (err, existingUser) => {
-    if (err) { return next(err); }
+          user.save((err) => {
+            if (err) { return next(err); }
+            req.logIn(user, (err) => {
+              if (err) {
+                return next(err);
+              }
+              res.redirect('/');
+            });
+          });
+
+          
+        });
+        
+      });
+    });
+
+	}
+	
+	
+	
+  });
+	
+  
+  /*User.findOne({ email: req.body.email }, (err, existingUser) => {
+    if (err) { 
+		return next(err); 
+	}
     if (existingUser) {
       req.flash('errors', { msg: 'Account with that email address already exists.' });
       return res.redirect('/signup');
@@ -106,7 +186,7 @@ exports.postSignup = (req, res, next) => {
         res.redirect('/');
       });
     });
-  });
+  });*/
 };
 
 /**

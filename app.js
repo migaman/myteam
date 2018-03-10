@@ -14,6 +14,7 @@ const chalk = require('chalk');
 const errorHandler = require('errorhandler');
 const lusca = require('lusca');
 const MongoStore = require('connect-mongo')(session);
+var pgSession = require('connect-pg-simple')(session);
 const flash = require('express-flash');
 const path = require('path');
 const mongoose = require('mongoose');
@@ -96,6 +97,22 @@ app.use(log4js.connectLogger(log4js.getLogger("http"), { level: 'debug' }));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(expressValidator());
+
+app.use(session({
+  store: new pgSession({
+    conString: process.env.DATABASE_URL,
+    tableName: 'mt_session'
+  }),
+  secret: process.env.SESSION_SECRET,
+  saveUninitialized: true,
+  resave: false,
+  cookie: {
+    maxAge: 14 * 24 * 60 * 60 * 1000, // 14 days
+    httpOnly: true
+    //, secure: true // only when on HTTPS
+  }
+}));
+
 app.use(session({
   resave: true,
   saveUninitialized: true,
