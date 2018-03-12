@@ -141,7 +141,7 @@ exports.postSignup = (req, res, next) => {
             return next(err); 
           }
           
-          const user = new User({
+          /*const user = new User({
             email: req.body.email,
             password: req.body.password
           });
@@ -154,7 +154,9 @@ exports.postSignup = (req, res, next) => {
               }
               res.redirect('/');
             });
-          });
+          });*/
+
+          res.redirect('/');
 
           
         });
