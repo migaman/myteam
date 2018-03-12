@@ -73,22 +73,22 @@ describe('samplee2etest', function(){
 		var application_host = 'http://localhost:3000';
 				
 		await driver.get(application_host);
-		await driver.wait(until.titleIs('Express'), 1000);
+		await driver.wait(until.titleIs('Home - Hackathon Starter'), 1000);
 		await driver.findElement(By.css('body'));
-		await driver.findElement(By.css('body > h1'));
+		await driver.findElement(By.css('body > div > h1'));
 		
 		await driver.get("http://localhost:3000");
 		var url = await driver.getCurrentUrl();
 		assert.equal(url, "http://localhost:3000/");
 		  
 		var title = await driver.getTitle();
-		assert.equal(title, "Express");
+		assert.equal(title, "Home - Hackathon Starter");
 		
-		var titleH1 = await driver.findElement(By.css('body > h1')).getText();
-		assert.equal(titleH1, "Express");
+		var titleH1 = await driver.findElement(By.css('body > div > h1')).getText();
+		assert.equal(titleH1, "Hackathon Starter");
 		
-		var welcome = await driver.findElement(By.css('body > p')).getText();
-		assert.equal(welcome, "Welcome to Express");
+		var welcome = await driver.findElement(By.css('body > div > p')).getText();
+		assert.equal(welcome, "A boilerplate for Node.js web applications.");
 		
 	
 	});
