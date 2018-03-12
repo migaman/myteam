@@ -4,6 +4,7 @@ Example Node.js project built on [hackathon-starter boilerplate](https://github.
 
 ## Status
 [![Build Status](https://travis-ci.org/migaman/myteam.svg?branch=master)](https://travis-ci.org/migaman/myteam)
+[![Build Status](https://saucelabs.com/buildstatus/migaman)](https://saucelabs.com/beta/builds/c76c9602c6244d0ba488f62e7e9759d5)
 [![dependencies](https://david-dm.org/migaman/myteam/status.svg)](https://david-dm.org/migaman/myteam)
 [![devDependencies](https://david-dm.org/migaman/myteam/dev-status.svg)](https://david-dm.org/migaman/myteam?type=dev)
 
@@ -26,3 +27,4 @@ https://myteams.herokuapp.com
 - [FontAwesome](https://github.com/FortAwesome/Font-Awesome)	Icon toolkit 
 - [Bootstrap](https://github.com/twbs/bootstrap)	Front-End library for designing responsive web applications
 - [jQuery](https://github.com/jquery/jquery)	JavaScript Library
+- [Sauce Labs](https://saucelabs.com)			Cross-browser Testing Platform and Open Source
