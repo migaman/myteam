@@ -13,11 +13,11 @@ const logger = require('morgan');
 const chalk = require('chalk');
 const errorHandler = require('errorhandler');
 const lusca = require('lusca');
-const MongoStore = require('connect-mongo')(session);
+//const MongoStore = require('connect-mongo')(session);
 var pgSession = require('connect-pg-simple')(session);
 const flash = require('express-flash');
 const path = require('path');
-const mongoose = require('mongoose');
+//const mongoose = require('mongoose');
 const passport = require('passport');
 const expressValidator = require('express-validator');
 const expressStatusMonitor = require('express-status-monitor');
@@ -68,13 +68,13 @@ const app = express();
 /**
  * Connect to MongoDB.
  */
-mongoose.Promise = global.Promise;
+/*mongoose.Promise = global.Promise;
 mongoose.connect(process.env.MONGODB_URI || process.env.MONGOLAB_URI);
 mongoose.connection.on('error', (err) => {
   console.error(err);
   console.log('%s MongoDB connection error. Please make sure MongoDB is running.', chalk.red('✗'));
   process.exit();
-});
+});*/
 
 /**
  * Express configuration.
@@ -113,7 +113,7 @@ app.use(session({
   }
 }));
 
-app.use(session({
+/*app.use(session({
   resave: true,
   saveUninitialized: true,
   secret: process.env.SESSION_SECRET,
@@ -122,7 +122,7 @@ app.use(session({
     autoReconnect: true,
     clear_interval: 3600
   })
-}));
+}));*/
 app.use(cookieParser());
 app.use(passport.initialize());
 app.use(passport.session());

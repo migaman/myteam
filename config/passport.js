@@ -16,13 +16,32 @@ const bcrypt = require('bcrypt-nodejs');
 const User = require('../models/User');
 
 passport.serializeUser((user, done) => {
+  console.log("serialize user " + user.id +  ","  +  user.email);
   done(null, user.id);
 });
 
 passport.deserializeUser((id, done) => {
-  User.findById(id, (err, user) => {
-    done(err, user);
-  });
+  console.log("deserialize user id: " + id);
+  //TODO: do not overwrite userid here as soon as parameter user model is fixed
+  id = 1;
+
+  var pgClient = new pg.Client({
+	  connectionString: process.env.DATABASE_URL
+	});
+  
+  pgClient.connect();
+  var sql = "SELECT idaccount, email, password FROM mt_account a WHERE idaccount = $1";
+  pgClient.query(sql,[id], (err, pgRes) => {
+      const user = new User({
+        email: pgRes.rows[0].email,
+        password: pgRes.rows[0].password
+      });
+	  
+
+      done(err, user);
+	});
+	
+
 });
 
 /**
@@ -43,11 +62,12 @@ passport.use(new LocalStrategy({ usernameField: 'email' }, (email, password, don
 	}
 	else {
     const user = new User({
+      id: pgRes.rows[0].idaccount,
       email: pgRes.rows[0].email,
       password: pgRes.rows[0].password
     });
 
-		
+		user.id = pgRes.rows[0].idaccount;
 		
 		bcrypt.compare(password, user.password, (err, isMatch) => {
       if (err) { 
