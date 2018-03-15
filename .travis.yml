@@ -22,5 +22,5 @@ before_install:
   - export PATH=$PATH:$PWD/geckodriver
 before_script:
   - psql -c "CREATE DATABASE myteam;" -U postgres
-  - psql -U postgres -d myteam -a -f ./scripts/example.sql
+  - psql -U postgres -d myteam -a -f ./d-postgresql/init.sql
   - npm start &
