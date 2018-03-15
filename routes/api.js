@@ -12,7 +12,6 @@ const Linkedin = require('node-linkedin')(process.env.LINKEDIN_ID, process.env.L
 const clockwork = require('clockwork')({ key: process.env.CLOCKWORK_KEY });
 const paypal = require('paypal-rest-sdk');
 const lob = require('lob')(process.env.LOB_KEY);
-const ig = bluebird.promisifyAll(require('instagram-node').instagram());
 const foursquare = require('node-foursquare')({
   secrets: {
     clientId: process.env.FOURSQUARE_ID,
@@ -78,21 +77,6 @@ exports.getTumblr = (req, res, next) => {
   });
 };
 
-/**
- * GET /api/facebook
- * Facebook API example.
- */
-exports.getFacebook = (req, res, next) => {
-  const token = req.user.tokens.find(token => token.kind === 'facebook');
-  graph.setAccessToken(token.accessToken);
-  graph.get(`${req.user.facebook}?fields=id,name,email,first_name,last_name,gender,link,locale,timezone`, (err, results) => {
-    if (err) { return next(err); }
-    res.render('api/facebook', {
-      title: 'Facebook API',
-      profile: results
-    });
-  });
-};
 
 /**
  * GET /api/scraping
@@ -443,31 +427,6 @@ exports.getLinkedin = (req, res, next) => {
   });
 };
 
-/**
- * GET /api/instagram
- * Instagram API example.
- */
-exports.getInstagram = (req, res, next) => {
-  const token = req.user.tokens.find(token => token.kind === 'instagram');
-  ig.use({ client_id: process.env.INSTAGRAM_ID, client_secret: process.env.INSTAGRAM_SECRET });
-  ig.use({ access_token: token.accessToken });
-  Promise.all([
-    ig.user_searchAsync('richellemead'),
-    ig.userAsync('175948269'),
-    ig.media_popularAsync(),
-    ig.user_self_media_recentAsync()
-  ])
-  .then(([searchByUsername, searchByUserId, popularImages, myRecentMedia]) => {
-    res.render('api/instagram', {
-      title: 'Instagram API',
-      usernames: searchByUsername,
-      userById: searchByUserId,
-      popularImages,
-      myRecentMedia
-    });
-  })
-  .catch(next);
-};
 
 /**
  * GET /api/paypal
