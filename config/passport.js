@@ -4,10 +4,7 @@ const LocalStrategy = require('passport-local').Strategy;
 const TwitterStrategy = require('passport-twitter').Strategy;
 const GitHubStrategy = require('passport-github').Strategy;
 const GoogleStrategy = require('passport-google-oauth').OAuth2Strategy;
-const LinkedInStrategy = require('passport-linkedin-oauth2').Strategy;
-const OpenIDStrategy = require('passport-openid').Strategy;
-const OAuthStrategy = require('passport-oauth').OAuthStrategy;
-const OAuth2Strategy = require('passport-oauth').OAuth2Strategy;
+
 const pg = require('pg');
 const bcrypt = require('bcrypt-nodejs');
 
