@@ -140,7 +140,19 @@ exports.postSignup = (req, res, next) => {
           if (err) { 
             return next(err); 
           }
-          
+
+          const user = new User({
+            email: req.body.email,
+            password: req.body.password
+          });
+
+          req.logIn(user, (err) => {
+            if (err) {
+              return next(err);
+            }
+            res.redirect('/');
+          });
+
           /*const user = new User({
             email: req.body.email,
             password: req.body.password
@@ -156,7 +168,7 @@ exports.postSignup = (req, res, next) => {
             });
           });*/
 
-          res.redirect('/');
+          //res.redirect('/');
 
           
         });

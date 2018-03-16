@@ -14,15 +14,10 @@ const bcrypt = require('bcrypt-nodejs');
 const User = require('../models/User');
 
 passport.serializeUser((user, done) => {
-  console.log("serialize user " + user.id +  ","  +  user.email);
-  done(null, user.id);
+  done(null, user.idAccount);
 });
 
-passport.deserializeUser((id, done) => {
-  console.log("deserialize user id: " + id);
-  //TODO: do not overwrite userid here as soon as parameter user model is fixed
-  id = 1;
-
+passport.deserializeUser((id, done) => { 
   var pgClient = new pg.Client({
 	  connectionString: process.env.DATABASE_URL
 	});
@@ -30,12 +25,13 @@ passport.deserializeUser((id, done) => {
   pgClient.connect();
   var sql = "SELECT idaccount, email, password FROM mt_account a WHERE idaccount = $1";
   pgClient.query(sql,[id], (err, pgRes) => {
-      const user = new User({
+      
+    const user = new User({
+        idAccount: pgRes.rows[0].idaccount,
         email: pgRes.rows[0].email,
         password: pgRes.rows[0].password
       });
 	  
-
       done(err, user);
 	});
 	
@@ -59,13 +55,11 @@ passport.use(new LocalStrategy({ usernameField: 'email' }, (email, password, don
 		return done(null, false, { msg: `Email ${email} not found.` });
 	}
 	else {
-    const user = new User({
-      id: pgRes.rows[0].idaccount,
+    var user = new User({
+      idAccount: pgRes.rows[0].idaccount,
       email: pgRes.rows[0].email,
       password: pgRes.rows[0].password
     });
-
-		user.id = pgRes.rows[0].idaccount;
 		
 		bcrypt.compare(password, user.password, (err, isMatch) => {
       if (err) { 
@@ -77,20 +71,7 @@ passport.use(new LocalStrategy({ usernameField: 'email' }, (email, password, don
 			}
 			return done(null, false, { msg: 'Invalid email or password.' });
 		 });
-		
-		/*user.comparePassword(password, (err, isMatch) => {
-		  if (err) { return done(err); }
-		  if (isMatch) {
-			return done(null, user);
-		  }
-		  return done(null, false, { msg: 'Invalid email or password.' });
-		});*/
-	
-	}
-	
-	
-	
-	
+	}	
   });
   
   /*
@@ -297,177 +278,7 @@ passport.use(new TwitterStrategy({
   }
 }));
 */
-/**
- * Sign in with LinkedIn.
- */
-/*passport.use(new LinkedInStrategy({
-  clientID: process.env.LINKEDIN_ID,
-  clientSecret: process.env.LINKEDIN_SECRET,
-  callbackURL: process.env.LINKEDIN_CALLBACK_URL,
-  scope: ['r_basicprofile', 'r_emailaddress'],
-  passReqToCallback: true
-}, (req, accessToken, refreshToken, profile, done) => {
-  if (req.user) {
-    User.findOne({ linkedin: profile.id }, (err, existingUser) => {
-      if (err) { return done(err); }
-      if (existingUser) {
-        req.flash('errors', { msg: 'There is already a LinkedIn account that belongs to you. Sign in with that account or delete it, then link it with your current account.' });
-        done(err);
-      } else {
-        User.findById(req.user.id, (err, user) => {
-          if (err) { return done(err); }
-          user.linkedin = profile.id;
-          user.tokens.push({ kind: 'linkedin', accessToken });
-          user.profile.name = user.profile.name || profile.displayName;
-          user.profile.location = user.profile.location || profile._json.location.name;
-          user.profile.picture = user.profile.picture || profile._json.pictureUrl;
-          user.profile.website = user.profile.website || profile._json.publicProfileUrl;
-          user.save((err) => {
-            if (err) { return done(err); }
-            req.flash('info', { msg: 'LinkedIn account has been linked.' });
-            done(err, user);
-          });
-        });
-      }
-    });
-  } else {
-    User.findOne({ linkedin: profile.id }, (err, existingUser) => {
-      if (err) { return done(err); }
-      if (existingUser) {
-        return done(null, existingUser);
-      }
-      User.findOne({ email: profile._json.emailAddress }, (err, existingEmailUser) => {
-        if (err) { return done(err); }
-        if (existingEmailUser) {
-          req.flash('errors', { msg: 'There is already an account using this email address. Sign in to that account and link it with LinkedIn manually from Account Settings.' });
-          done(err);
-        } else {
-          const user = new User();
-          user.linkedin = profile.id;
-          user.tokens.push({ kind: 'linkedin', accessToken });
-          user.email = profile._json.emailAddress;
-          user.profile.name = profile.displayName;
-          user.profile.location = profile._json.location.name;
-          user.profile.picture = profile._json.pictureUrl;
-          user.profile.website = profile._json.publicProfileUrl;
-          user.save((err) => {
-            done(err, user);
-          });
-        }
-      });
-    });
-  }
-}));
-*/
 
-/**
- * Tumblr API OAuth.
- */
-/*
- passport.use('tumblr', new OAuthStrategy({
-  requestTokenURL: 'http://www.tumblr.com/oauth/request_token',
-  accessTokenURL: 'http://www.tumblr.com/oauth/access_token',
-  userAuthorizationURL: 'http://www.tumblr.com/oauth/authorize',
-  consumerKey: process.env.TUMBLR_KEY,
-  consumerSecret: process.env.TUMBLR_SECRET,
-  callbackURL: '/auth/tumblr/callback',
-  passReqToCallback: true
-},
-  (req, token, tokenSecret, profile, done) => {
-    User.findById(req.user._id, (err, user) => {
-      if (err) { return done(err); }
-      user.tokens.push({ kind: 'tumblr', accessToken: token, tokenSecret });
-      user.save((err) => {
-        done(err, user);
-      });
-    });
-  }
-));
-*/
-/**
- * Foursquare API OAuth.
- */
-/*
- passport.use('foursquare', new OAuth2Strategy({
-  authorizationURL: 'https://foursquare.com/oauth2/authorize',
-  tokenURL: 'https://foursquare.com/oauth2/access_token',
-  clientID: process.env.FOURSQUARE_ID,
-  clientSecret: process.env.FOURSQUARE_SECRET,
-  callbackURL: process.env.FOURSQUARE_REDIRECT_URL,
-  passReqToCallback: true
-},
-  (req, accessToken, refreshToken, profile, done) => {
-    User.findById(req.user._id, (err, user) => {
-      if (err) { return done(err); }
-      user.tokens.push({ kind: 'foursquare', accessToken });
-      user.save((err) => {
-        done(err, user);
-      });
-    });
-  }
-));
-*/
-/**
- * Steam API OpenID.
- */
-/*
- passport.use(new OpenIDStrategy({
-  apiKey: process.env.STEAM_KEY,
-  providerURL: 'http://steamcommunity.com/openid',
-  returnURL: 'http://localhost:3000/auth/steam/callback',
-  realm: 'http://localhost:3000/',
-  stateless: true
-}, (identifier, done) => {
-  const steamId = identifier.match(/\d+$/)[0];
-  const profileURL = `http://api.steampowered.com/ISteamUser/GetPlayerSummaries/v0002/?key=${process.env.STEAM_KEY}&steamids=${steamId}`;
-
-  User.findOne({ steam: steamId }, (err, existingUser) => {
-    if (err) { return done(err); }
-    if (existingUser) return done(err, existingUser);
-    request(profileURL, (error, response, body) => {
-      if (!error && response.statusCode === 200) {
-        const data = JSON.parse(body);
-        const profile = data.response.players[0];
-
-        const user = new User();
-        user.steam = steamId;
-        user.email = `${steamId}@steam.com`; // steam does not disclose emails, prevent duplicate keys
-        user.tokens.push({ kind: 'steam', accessToken: steamId });
-        user.profile.name = profile.personaname;
-        user.profile.picture = profile.avatarmedium;
-        user.save((err) => {
-          done(err, user);
-        });
-      } else {
-        done(error, null);
-      }
-    });
-  });
-}));
-*/
-/**
- * Pinterest API OAuth.
- */
-/*
- passport.use('pinterest', new OAuth2Strategy({
-  authorizationURL: 'https://api.pinterest.com/oauth/',
-  tokenURL: 'https://api.pinterest.com/v1/oauth/token',
-  clientID: process.env.PINTEREST_ID,
-  clientSecret: process.env.PINTEREST_SECRET,
-  callbackURL: process.env.PINTEREST_REDIRECT_URL,
-  passReqToCallback: true
-},
-  (req, accessToken, refreshToken, profile, done) => {
-    User.findById(req.user._id, (err, user) => {
-      if (err) { return done(err); }
-      user.tokens.push({ kind: 'pinterest', accessToken });
-      user.save((err) => {
-        done(err, user);
-      });
-    });
-  }
-));
-*/
 /**
  * Login Required middleware.
  */
