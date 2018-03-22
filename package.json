@@ -11,7 +11,7 @@
     "start": "node ./bin/www",
     "test": "mocha --recursive --timeout 10000 --reporter spec",
     "postinstall": "npm rebuild node-sass",
-    "eslint": "eslint **/*.js"
+    "lint": "eslint **/*.js --ignore-pattern node_modules/"
   },
   "author": "Michael",
   "license": "GPL-3.0",
@@ -64,27 +64,5 @@
     "selenium-webdriver": "^4.0.0-alpha.1",
     "sinon": "^3.3.0",
     "supertest": "^3.0.0"
-  },
-  "eslintConfig": {
-    "extends": "airbnb-base",
-    "rules": {
-      "comma-dangle": 0,
-      "consistent-return": 0,
-      "no-param-reassign": 0,
-      "no-underscore-dangle": 0,
-      "no-shadow": 0,
-      "no-console": 0,
-      "no-plusplus": 0,
-      "no-unused-expressions": 0,
-      "chai-friendly/no-unused-expressions": 2
-    },
-    "env": {
-      "jasmine": true,
-      "mocha": true,
-      "node": true
-    },
-    "plugins": [
-      "chai-friendly"
-    ]
   }
 }
