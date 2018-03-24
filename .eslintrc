@@ -1,0 +1,11 @@
+{
+  "extends": "eslint:recommended",
+  "env" : {
+    "node" : true,
+    "jquery" : true,
+	"es6": true
+  },
+  "parserOptions": {
+   "ecmaVersion": 6
+  }
+}

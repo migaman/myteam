@@ -4,7 +4,7 @@ var log = require('log4js').getLogger("index");
 
 
 /* GET home page. */
-router.get('/', function(req, res, next) {
+router.get('/', function(req, res) {
   log.debug("This is in the index module");
   res.render('home', { 
 	title: 'Home' 
@@ -24,14 +24,14 @@ router.get('/rest', function(req, res) {
 
 /* GET examplelist page. */
 router.get('/examplelist', function(req, res) {
-	var pg = req.pg;
+    var pg = req.pg;
 	
 	
 	
 	var pgClient = new pg.Client({
-	  connectionString: process.env.DATABASE_URL
+      connectionString: process.env.DATABASE_URL
 	});
-	    
+	
 	pgClient.connect();
 	
 	var sql = "SELECT e.exampletext FROM mt_example e";
@@ -66,7 +66,7 @@ router.post('/addexample', function(req, res) {
 
 	
 	var pgClient = new pg.Client({
-	  connectionString: process.env.DATABASE_URL
+      connectionString: process.env.DATABASE_URL
 	});
 	
 	
@@ -80,14 +80,15 @@ router.post('/addexample', function(req, res) {
 	var sql = "INSERT INTO mt_example (exampletext) VALUES ($1)";
 	
 	
-	pgClient.query(sql,[userName], (err, pgRes) => {
+    pgClient.query(sql,[userName], (err, pgRes) => {
 
 		if (err) {
 			throw err;
 		}
 		else {
 			pgClient.end();
-			
+            
+            log.debug("Insert erfolgreich" + pgRes);
 
             // And forward to success page
             res.redirect("examplelist");

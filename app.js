@@ -1,16 +1,15 @@
 /**
  * Module dependencies.
  */
-const env = require('env2')('.env');
+require('env2')('.env');
 const express = require('express');
 const compression = require('compression');
 const session = require('express-session');
-var favicon = require('serve-favicon');
+//var favicon = require('serve-favicon');
 var log4js = require('log4js');
 var cookieParser = require('cookie-parser');
 const bodyParser = require('body-parser');
 const logger = require('morgan');
-const chalk = require('chalk');
 const errorHandler = require('errorhandler');
 const lusca = require('lusca');
 var pgSession = require('connect-pg-simple')(session);
@@ -20,8 +19,8 @@ const passport = require('passport');
 const expressValidator = require('express-validator');
 const expressStatusMonitor = require('express-status-monitor');
 const sass = require('node-sass-middleware');
-const multer = require('multer');
-var fs = require('fs');
+//const multer = require('multer');
+//var fs = require('fs');
 
 
 //Postgres
@@ -34,7 +33,7 @@ var log = log4js.getLogger("app");
 const VERSION = process.env.HEROKU_RELEASE_VERSION;
 
 
-const upload = multer({ dest: path.join(__dirname, 'uploads') });
+//const upload = multer({ dest: path.join(__dirname, 'uploads') });
 
 /**
  * Load environment variables from .env file, where API keys and passwords are configured.
@@ -218,6 +217,10 @@ app.use(function(req, res, next) {
 app.use(function(err, req, res, next) {
   log.error("Something went wrong:", err);
   // set locals, only providing error in development
+  
+  
+  log.debug("Error handler next: " + next);
+
   res.locals.message = err.message;
   res.locals.error = req.app.get('env') === 'development' ? err : {};
 
@@ -226,13 +229,7 @@ app.use(function(err, req, res, next) {
   res.render('error');
 });
 
-/**
- * Start Express server.
- */
-/* 
-app.listen(app.get('port'), () => {
-  console.log('%s App is running at http://localhost:%d in %s mode', chalk.green('✓'), app.get('port'), app.get('env'));
-  console.log('  Press CTRL-C to stop\n');
-});
-*/
+
+log.debug("Release Version: " + VERSION);
+
 module.exports = app;

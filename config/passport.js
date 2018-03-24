@@ -1,9 +1,8 @@
 const passport = require('passport');
-const request = require('request');
 const LocalStrategy = require('passport-local').Strategy;
-const TwitterStrategy = require('passport-twitter').Strategy;
-const GitHubStrategy = require('passport-github').Strategy;
-const GoogleStrategy = require('passport-google-oauth').OAuth2Strategy;
+//const TwitterStrategy = require('passport-twitter').Strategy;
+//const GitHubStrategy = require('passport-github').Strategy;
+//const GoogleStrategy = require('passport-google-oauth').OAuth2Strategy;
 
 const pg = require('pg');
 const bcrypt = require('bcrypt-nodejs');
@@ -16,8 +15,8 @@ passport.serializeUser((user, done) => {
 
 passport.deserializeUser((id, done) => { 
   var pgClient = new pg.Client({
-	  connectionString: process.env.DATABASE_URL
-	});
+    connectionString: process.env.DATABASE_URL
+  });
   
   pgClient.connect();
   var sql = "SELECT idaccount, email, password FROM mt_account a WHERE idaccount = $1";
@@ -28,10 +27,10 @@ passport.deserializeUser((id, done) => {
         email: pgRes.rows[0].email,
         password: pgRes.rows[0].password
       });
-	  
+      
       done(err, user);
-	});
-	
+   });
+   
 
 });
 
@@ -41,24 +40,24 @@ passport.deserializeUser((id, done) => {
 passport.use(new LocalStrategy({ usernameField: 'email' }, (email, password, done) => {
   
   var pgClient = new pg.Client({
-	  connectionString: process.env.DATABASE_URL
-	});
+    connectionString: process.env.DATABASE_URL
+  });
   
   pgClient.connect();
   var sql = "SELECT idaccount, email, password FROM mt_account a WHERE email = $1";
   pgClient.query(sql,[email.toLowerCase()], (err, pgRes) => {
     if (err) { return done(err); }
-	if (!pgRes.rowCount) {
-		return done(null, false, { msg: `Email ${email} not found.` });
-	}
-	else {
+    if (!pgRes.rowCount) {
+      return done(null, false, { msg: `Email ${email} not found.` });
+   }
+   else {
     var user = new User({
       idAccount: pgRes.rows[0].idaccount,
       email: pgRes.rows[0].email,
       password: pgRes.rows[0].password
     });
-		
-		bcrypt.compare(password, user.password, (err, isMatch) => {
+    
+      bcrypt.compare(password, user.password, (err, isMatch) => {
       if (err) { 
         return done(err); 
       }
@@ -67,7 +66,7 @@ passport.use(new LocalStrategy({ usernameField: 'email' }, (email, password, don
 				return done(null, user);
 			}
 			return done(null, false, { msg: 'Invalid email or password.' });
-		 });
+     });
 	}	
   });
   

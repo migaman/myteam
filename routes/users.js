@@ -1,5 +1,6 @@
 var express = require('express');
 var router = express.Router();
+var log = require('log4js').getLogger("index");
 
 /*
  * GET userlist.
@@ -14,9 +15,9 @@ router.get('/userlist', function(req, res) {
 	var pg = req.pg;
 	
 	var pgClient = new pg.Client({
-	  connectionString: process.env.DATABASE_URL
+      connectionString: process.env.DATABASE_URL
 	});
-	   
+	
 	pgClient.connect();
 		
 	var sql = "SELECT array_to_json(array_agg(t)) FROM mt_example t";
@@ -24,7 +25,6 @@ router.get('/userlist', function(req, res) {
 	pgClient.query(sql, (err, pgRes) => {
 		if (err) throw err;
 		
-		var myJson = "";
 		res.json(pgRes.rows[0].array_to_json);
 		
 		pgClient.end();
@@ -51,7 +51,7 @@ router.post('/adduser', function(req, res) {
 	
 	var pg = req.pg;
 	var pgClient = new pg.Client({
-	  connectionString: process.env.DATABASE_URL
+      connectionString: process.env.DATABASE_URL
 	});
 	
 	pgClient.connect();
@@ -62,7 +62,11 @@ router.post('/adduser', function(req, res) {
 	var sql = "INSERT INTO mt_example (exampletext) VALUES ($1)";
 		
 	pgClient.query(sql,[userName], (err, pgRes) => {
-		if (err) throw err;
+		if (err) {
+			throw err;
+		}
+
+		log.debug("Insert Example erfolgreich" + pgRes);
 		
 		res.send(
             (err === null) ? { msg: '' } : { msg: err }
@@ -96,7 +100,7 @@ router.delete('/deleteuser/:id', function(req, res) {
 	
 	var pg = req.pg;
 	var pgClient = new pg.Client({
-	  connectionString: process.env.DATABASE_URL
+      connectionString: process.env.DATABASE_URL
 	});
 	
 	pgClient.connect();
@@ -108,8 +112,12 @@ router.delete('/deleteuser/:id', function(req, res) {
 	var sql = "DELETE FROM mt_example WHERE idExample = $1";
 		
 	pgClient.query(sql,[userToDelete], (err, pgRes) => {
-		if (err) throw err;
+		if (err) {
+			throw err;
+		}
 		
+		log.debug("Delete Example erfolgreich" + pgRes);
+
 		res.send((err === null) ? { msg: '' } : { msg:'error: ' + err });
 		
 		pgClient.end();

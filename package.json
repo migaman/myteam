@@ -9,9 +9,10 @@
   },
   "scripts": {
     "start": "node ./bin/www",
+    "pretest": "npm run lint",
     "test": "mocha --recursive --timeout 10000 --reporter spec",
     "postinstall": "npm rebuild node-sass",
-    "lint": "eslint **/*.js --ignore-pattern node_modules/"
+    "lint": "eslint **/*.js --ignore-pattern test/ --ignore-pattern public/"
   },
   "author": "Michael",
   "license": "GPL-3.0",

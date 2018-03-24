@@ -4,6 +4,7 @@ const nodemailer = require('nodemailer');
 const passport = require('passport');
 const User = require('../models/User');
 const bcrypt = require('bcrypt-nodejs');
+var log = require('log4js').getLogger("index");
 
 /**
  * GET /login
@@ -93,19 +94,17 @@ exports.postSignup = (req, res, next) => {
   var password = req.body.password;
   var pg = req.pg;
   var pgClient = new pg.Client({
-	  connectionString: process.env.DATABASE_URL
+	connectionString: process.env.DATABASE_URL
 	});
-	   
+	
   pgClient.connect();
   var sql = "SELECT * FROM mt_account a WHERE email = $1";
   pgClient.query(sql,[email], (err, pgRes) => {
     if (err) {
-	  throw err;
+     throw err;
 	}
 	
 	if (pgRes.rowCount) {
-		console.log("existing user" + pgRes);
-		console.log("userid: " + pgRes.rows[0].idaccount);
 		req.flash('errors', { msg: 'Account with that email address already exists.' });
 		pgClient.end();
 		return res.redirect('/signup');
@@ -118,7 +117,6 @@ exports.postSignup = (req, res, next) => {
 		*/
 	}
 	else {
-		console.log("user not found.. save user");
     
     bcrypt.genSalt(10, (err, salt) => {
       if (err) 
@@ -132,14 +130,13 @@ exports.postSignup = (req, res, next) => {
         }
         
         var sql = "INSERT INTO mt_account(email, password) VALUES ($1, $2)";
-        console.log("password: " + password);
-        console.log("hash password: " + hash);
-        console.log("salt: " + salt);
     
         pgClient.query(sql,[email, hash], (err, pgRes) => {
           if (err) { 
             return next(err); 
           }
+
+          log.debug("Insert Account erfolgreich" + pgRes);
 
           const user = new User({
             email: req.body.email,

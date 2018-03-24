@@ -1,7 +1,4 @@
-const bluebird = require('bluebird');
-const request = bluebird.promisifyAll(require('request'), { multiArgs: true });
-const cheerio = require('cheerio');
-const tumblr = require('tumblr.js');
+//const request = bluebird.promisifyAll(require('request'), { multiArgs: true });
 const GitHub = require('github');
 const Twit = require('twit');
 const lob = require('lob')(process.env.LOB_KEY);
