@@ -37,11 +37,6 @@ const VERSION = process.env.HEROKU_RELEASE_VERSION;
 //const upload = multer({ dest: path.join(__dirname, 'uploads') });
 
 /**
- * Load environment variables from .env file, where API keys and passwords are configured.
- */
-//dotenv.load({ path: '.env.example' });
-
-/**
  * Controllers (route handlers).
  */
 var routeHome = require('./routes/home');
@@ -74,8 +69,8 @@ app.set('view engine', 'pug');
 app.use(expressStatusMonitor());
 app.use(compression());
 app.use(sass({
-  src: path.join(__dirname, 'public'),
-  dest: path.join(__dirname, 'public')
+	src: path.join(__dirname, 'public'),
+	dest: path.join(__dirname, 'public')
 }));
 //TODO: remove morgan logger
 app.use(logger('dev'));
@@ -176,7 +171,6 @@ app.get('/account/unlink/:provider', passportConfig.isAuthenticated, userControl
 app.get('/api/github', passportConfig.isAuthenticated, passportConfig.isAuthorized, apiController.getGithub);
 app.get('/api/twitter', passportConfig.isAuthenticated, passportConfig.isAuthorized, apiController.getTwitter);
 app.post('/api/twitter', passportConfig.isAuthenticated, passportConfig.isAuthorized, apiController.postTwitter);
-app.get('/api/lob', apiController.getLob);
 app.get('/api/upload', apiController.getFileUpload);
 app.post('/api/upload', upload.single('myFile'), apiController.postFileUpload);
 */

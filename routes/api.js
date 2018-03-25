@@ -1,8 +1,9 @@
 "use strict";
+
 //const request = bluebird.promisifyAll(require('request'), { multiArgs: true });
 const GitHub = require('github');
 const Twit = require('twit');
-const lob = require('lob')(process.env.LOB_KEY);
+
 
 /**
  * GET /api
@@ -89,20 +90,6 @@ exports.postTwitter = (req, res, next) => {
 		if (err) { return next(err); }
 		req.flash('success', { msg: 'Your tweet has been posted.' });
 		res.redirect('/api/twitter');
-	});
-};
-
-/**
- * GET /api/lob
- * Lob API example.
- */
-exports.getLob = (req, res, next) => {
-	lob.routes.list({ zip_codes: ['10007'] }, (err, routes) => {
-		if (err) { return next(err); }
-		res.render('api/lob', {
-			title: 'Lob API',
-			routes: routes.data[0].routes
-		});
 	});
 };
 
