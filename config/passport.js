@@ -1,3 +1,5 @@
+"use strict";
+
 const passport = require('passport');
 const LocalStrategy = require('passport-local').Strategy;
 //const TwitterStrategy = require('passport-twitter').Strategy;
@@ -10,27 +12,27 @@ const bcrypt = require('bcrypt-nodejs');
 const User = require('../models/User');
 
 passport.serializeUser((user, done) => {
-  done(null, user.idAccount);
+	done(null, user.idAccount);
 });
 
-passport.deserializeUser((id, done) => { 
-  var pgClient = new pg.Client({
-    connectionString: process.env.DATABASE_URL
-  });
-  
-  pgClient.connect();
-  var sql = "SELECT idaccount, email, password FROM mt_account a WHERE idaccount = $1";
-  pgClient.query(sql,[id], (err, pgRes) => {
-      
-    const user = new User({
-        idAccount: pgRes.rows[0].idaccount,
-        email: pgRes.rows[0].email,
-        password: pgRes.rows[0].password
-      });
-      
-      done(err, user);
-   });
-   
+passport.deserializeUser((id, done) => {
+	var pgClient = new pg.Client({
+		connectionString: process.env.DATABASE_URL
+	});
+
+	pgClient.connect();
+	var sql = "SELECT idaccount, email, password FROM mt_account a WHERE idaccount = $1";
+	pgClient.query(sql, [id], (err, pgRes) => {
+
+		const user = new User({
+			idAccount: pgRes.rows[0].idaccount,
+			email: pgRes.rows[0].email,
+			password: pgRes.rows[0].password
+		});
+
+		done(err, user);
+	});
+
 
 });
 
@@ -38,53 +40,53 @@ passport.deserializeUser((id, done) => {
  * Sign in using Email and Password.
  */
 passport.use(new LocalStrategy({ usernameField: 'email' }, (email, password, done) => {
-  
-  var pgClient = new pg.Client({
-    connectionString: process.env.DATABASE_URL
-  });
-  
-  pgClient.connect();
-  var sql = "SELECT idaccount, email, password FROM mt_account a WHERE email = $1";
-  pgClient.query(sql,[email.toLowerCase()], (err, pgRes) => {
-    if (err) { return done(err); }
-    if (!pgRes.rowCount) {
-      return done(null, false, { msg: `Email ${email} not found.` });
-   }
-   else {
-    var user = new User({
-      idAccount: pgRes.rows[0].idaccount,
-      email: pgRes.rows[0].email,
-      password: pgRes.rows[0].password
-    });
-    
-      bcrypt.compare(password, user.password, (err, isMatch) => {
-      if (err) { 
-        return done(err); 
-      }
 
-			if (isMatch) {
-				return done(null, user);
-			}
-			return done(null, false, { msg: 'Invalid email or password.' });
-     });
-	}	
-  });
-  
-  /*
-  User.findOne({ email: email.toLowerCase() }, (err, user) => {
-    if (err) { return done(err); }
-    if (!user) {
-      return done(null, false, { msg: `Email ${email} not found.` });
-    }
-    user.comparePassword(password, (err, isMatch) => {
-      if (err) { return done(err); }
-      if (isMatch) {
-        return done(null, user);
-      }
-      return done(null, false, { msg: 'Invalid email or password.' });
-    });
-  });
-  */
+	var pgClient = new pg.Client({
+		connectionString: process.env.DATABASE_URL
+	});
+
+	pgClient.connect();
+	var sql = "SELECT idaccount, email, password FROM mt_account a WHERE email = $1";
+	pgClient.query(sql, [email.toLowerCase()], (err, pgRes) => {
+		if (err) { return done(err); }
+		if (!pgRes.rowCount) {
+			return done(null, false, { msg: `Email ${email} not found.` });
+		}
+		else {
+			var user = new User({
+				idAccount: pgRes.rows[0].idaccount,
+				email: pgRes.rows[0].email,
+				password: pgRes.rows[0].password
+			});
+
+			bcrypt.compare(password, user.password, (err, isMatch) => {
+				if (err) {
+					return done(err);
+				}
+
+				if (isMatch) {
+					return done(null, user);
+				}
+				return done(null, false, { msg: 'Invalid email or password.' });
+			});
+		}
+	});
+
+	/*
+	User.findOne({ email: email.toLowerCase() }, (err, user) => {
+	  if (err) { return done(err); }
+	  if (!user) {
+		return done(null, false, { msg: `Email ${email} not found.` });
+	  }
+	  user.comparePassword(password, (err, isMatch) => {
+		if (err) { return done(err); }
+		if (isMatch) {
+		  return done(null, user);
+		}
+		return done(null, false, { msg: 'Invalid email or password.' });
+	  });
+	});
+	*/
 }));
 
 /**
@@ -279,21 +281,21 @@ passport.use(new TwitterStrategy({
  * Login Required middleware.
  */
 exports.isAuthenticated = (req, res, next) => {
-  if (req.isAuthenticated()) {
-    return next();
-  }
-  res.redirect('/login');
+	if (req.isAuthenticated()) {
+		return next();
+	}
+	res.redirect('/login');
 };
 
 /**
  * Authorization Required middleware.
  */
 exports.isAuthorized = (req, res, next) => {
-  const provider = req.path.split('/').slice(-1)[0];
-  const token = req.user.tokens.find(token => token.kind === provider);
-  if (token) {
-    next();
-  } else {
-    res.redirect(`/auth/${provider}`);
-  }
+	const provider = req.path.split('/').slice(-1)[0];
+	const token = req.user.tokens.find(token => token.kind === provider);
+	if (token) {
+		next();
+	} else {
+		res.redirect(`/auth/${provider}`);
+	}
 };

@@ -1,3 +1,4 @@
+"use strict";
 /**
  * Module dependencies.
  */
@@ -86,18 +87,18 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(expressValidator());
 
 app.use(session({
-  store: new pgSession({
-    conString: process.env.DATABASE_URL,
-    tableName: 'mt_session'
-  }),
-  secret: process.env.SESSION_SECRET,
-  saveUninitialized: true,
-  resave: false,
-  cookie: {
-    maxAge: 14 * 24 * 60 * 60 * 1000, // 14 days
-    httpOnly: true
-    //, secure: true // only when on HTTPS
-  }
+	store: new pgSession({
+		conString: process.env.DATABASE_URL,
+		tableName: 'mt_session'
+	}),
+	secret: process.env.SESSION_SECRET,
+	saveUninitialized: true,
+	resave: false,
+	cookie: {
+		maxAge: 14 * 24 * 60 * 60 * 1000, // 14 days
+		httpOnly: true
+		//, secure: true // only when on HTTPS
+	}
 }));
 
 app.use(cookieParser());
@@ -106,40 +107,40 @@ app.use(passport.session());
 app.use(flash());
 
 app.use((req, res, next) => {
-  if (req.path === '/api/upload') {
-    next();
-  } else {
-    lusca.csrf()(req, res, next);
-  }
+	if (req.path === '/api/upload') {
+		next();
+	} else {
+		lusca.csrf()(req, res, next);
+	}
 });
 app.use(lusca.xframe('SAMEORIGIN'));
 app.use(lusca.xssProtection(true));
 app.use((req, res, next) => {
-  res.locals.user = req.user;
-  next();
+	res.locals.user = req.user;
+	next();
 });
 app.use((req, res, next) => {
-  // After successful login, redirect back to the intended page
-  if (!req.user &&
-      req.path !== '/login' &&
-      req.path !== '/signup' &&
-      !req.path.match(/^\/auth/) &&
-      !req.path.match(/\./)) {
-    req.session.returnTo = req.path;
-  } else if (req.user &&
-      req.path === '/account') {
-    req.session.returnTo = req.path;
-  }
-  next();
+	// After successful login, redirect back to the intended page
+	if (!req.user &&
+		req.path !== '/login' &&
+		req.path !== '/signup' &&
+		!req.path.match(/^\/auth/) &&
+		!req.path.match(/\./)) {
+		req.session.returnTo = req.path;
+	} else if (req.user &&
+		req.path === '/account') {
+		req.session.returnTo = req.path;
+	}
+	next();
 });
 
 app.use(express.static(path.join(__dirname, 'public'), { maxAge: 31557600000 }));
 
 
 // Make our db accessible to our router
-app.use(function(req,res,next){
-    req.pg = pg;
-    next();
+app.use(function (req, res, next) {
+	req.pg = pg;
+	next();
 });
 
 //App routes
@@ -203,30 +204,29 @@ app.get('/auth/twitter/callback', passport.authenticate('twitter', { failureRedi
  */
 app.use(errorHandler());
 
-
 // catch 404 and forward to error handler
-app.use(function(req, res, next) {
-  var err = new Error('Not Found');
-  log.error("Something went wrong:", err);
-  err.status = 404;
-  next(err);
+app.use(function (req, res, next) {
+	var err = new Error('Not Found');
+	log.error("Something went wrong:", err);
+	err.status = 404;
+	next(err);
 });
 
 
 // error handler
-app.use(function(err, req, res, next) {
-  log.error("Something went wrong:", err);
-  // set locals, only providing error in development
-  
-  
-  log.debug("Error handler next: " + next);
+app.use(function (err, req, res, next) {
+	log.error("Something went wrong:", err);
+	// set locals, only providing error in development
 
-  res.locals.message = err.message;
-  res.locals.error = req.app.get('env') === 'development' ? err : {};
 
-  // render the error page
-  res.status(err.status || 500);
-  res.render('error');
+	log.debug("Error handler next: " + next);
+
+	res.locals.message = err.message;
+	res.locals.error = req.app.get('env') === 'development' ? err : {};
+
+	// render the error page
+	res.status(err.status || 500);
+	res.render('error');
 });
 
 

@@ -7,5 +7,9 @@
   },
   "parserOptions": {
    "ecmaVersion": 6
+  },
+  "rules": {
+	"no-mixed-spaces-and-tabs": 2,
+	"strict": 2                            // require or disallow strict mode directives
   }
 }
