@@ -110,13 +110,6 @@ exports.postSignup = (req, res, next) => {
 			req.flash('errors', { msg: 'Account with that email address already exists.' });
 			pgClient.end();
 			return res.redirect('/signup');
-
-			/*
-			var firstRow = pgRes.rows[0];
-			for(var columnName in firstRow) {
-			  console.log('column "%s" has a value of "%j"', columnName, firstRow[columnName]);
-			}
-			*/
 		}
 		else {
 
@@ -129,16 +122,16 @@ exports.postSignup = (req, res, next) => {
 						return next(err);
 					}
 
-					var sql = "INSERT INTO mt_account(email, password) VALUES ($1, $2)";
+					var sql = "INSERT INTO mt_account(email, password) VALUES ($1, $2) RETURNING idaccount";
 
 					pgClient.query(sql, [email, hash], (err, pgRes) => {
 						if (err) {
 							return next(err);
 						}
+						var idAccount = pgRes.rows[0].idaccount;
 
-						log.debug("Insert Account erfolgreich" + pgRes);
-
-						const user = new User({
+						var user = new User({
+							idAccount: idAccount,
 							email: req.body.email,
 							password: req.body.password
 						});
@@ -149,24 +142,6 @@ exports.postSignup = (req, res, next) => {
 							}
 							res.redirect('/');
 						});
-
-						/*const user = new User({
-						  email: req.body.email,
-						  password: req.body.password
-						});
-			  
-						user.save((err) => {
-						  if (err) { return next(err); }
-						  req.logIn(user, (err) => {
-							if (err) {
-							  return next(err);
-							}
-							res.redirect('/');
-						  });
-						});*/
-
-						//res.redirect('/');
-
 
 					});
 
@@ -180,24 +155,6 @@ exports.postSignup = (req, res, next) => {
 	});
 
 
-	/*User.findOne({ email: req.body.email }, (err, existingUser) => {
-	  if (err) { 
-		  return next(err); 
-	  }
-	  if (existingUser) {
-		req.flash('errors', { msg: 'Account with that email address already exists.' });
-		return res.redirect('/signup');
-	  }
-	  user.save((err) => {
-		if (err) { return next(err); }
-		req.logIn(user, (err) => {
-		  if (err) {
-			return next(err);
-		  }
-		  res.redirect('/');
-		});
-	  });
-	});*/
 };
 
 /**
