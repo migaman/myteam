@@ -6,7 +6,6 @@ const nodemailer = require('nodemailer');
 const passport = require('passport');
 const User = require('../models/User');
 const bcrypt = require('bcrypt-nodejs');
-var log = require('log4js').getLogger("index");
 
 /**
  * GET /login
