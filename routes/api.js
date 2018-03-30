@@ -1,8 +1,8 @@
 "use strict";
 
 //const request = bluebird.promisifyAll(require('request'), { multiArgs: true });
-const GitHub = require('github');
-const Twit = require('twit');
+//const GitHub = require('github');
+//const Twit = require('twit');
 
 
 /**
@@ -21,7 +21,7 @@ exports.getApi = (req, res) => {
  * GET /api/github
  * GitHub API Example.
  */
-exports.getGithub = (req, res, next) => {
+/*exports.getGithub = (req, res, next) => {
 	const github = new GitHub();
 	github.repos.get({ owner: 'sahat', repo: 'hackathon-starter' }, (err, repo) => {
 		if (err) { return next(err); }
@@ -30,25 +30,13 @@ exports.getGithub = (req, res, next) => {
 			repo
 		});
 	});
-};
-
-/**
- * GET /api/aviary
- * Aviary image processing example.
- */
-exports.getAviary = (req, res) => {
-	res.render('api/aviary', {
-		title: 'Aviary API'
-	});
-};
-
-
+};*/
 
 /**
  * GET /api/twitter
  * Twitter API example.
  */
-exports.getTwitter = (req, res, next) => {
+/*exports.getTwitter = (req, res, next) => {
 	const token = req.user.tokens.find(token => token.kind === 'twitter');
 	const T = new Twit({
 		consumer_key: process.env.TWITTER_KEY,
@@ -63,13 +51,13 @@ exports.getTwitter = (req, res, next) => {
 			tweets: reply.statuses
 		});
 	});
-};
+};*/
 
 /**
  * POST /api/twitter
  * Post a tweet.
  */
-exports.postTwitter = (req, res, next) => {
+/*exports.postTwitter = (req, res, next) => {
 	req.assert('tweet', 'Tweet cannot be empty').notEmpty();
 
 	const errors = req.validationErrors();
@@ -91,7 +79,7 @@ exports.postTwitter = (req, res, next) => {
 		req.flash('success', { msg: 'Your tweet has been posted.' });
 		res.redirect('/api/twitter');
 	});
-};
+};*/
 
 /**
  * GET /api/upload

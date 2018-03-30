@@ -20,7 +20,7 @@ const passport = require('passport');
 const expressValidator = require('express-validator');
 const expressStatusMonitor = require('express-status-monitor');
 const sass = require('node-sass-middleware');
-//const multer = require('multer');
+const multer = require('multer');
 //var fs = require('fs');
 
 
@@ -34,7 +34,7 @@ var log = log4js.getLogger("app");
 const VERSION = process.env.HEROKU_RELEASE_VERSION;
 
 
-//const upload = multer({ dest: path.join(__dirname, 'uploads') });
+const upload = multer({ dest: path.join(__dirname, 'uploads') });
 
 /**
  * Controllers (route handlers).
@@ -42,7 +42,7 @@ const VERSION = process.env.HEROKU_RELEASE_VERSION;
 var routeHome = require('./routes/home');
 var routeUsers = require('./routes/users');
 var userController = require('./routes/user');
-//var apiController = require('./routes/api');
+var apiController = require('./routes/api');
 var contactController = require('./routes/contact');
 
 /**
@@ -173,14 +173,13 @@ app.get('/account/unlink/:provider', passportConfig.isAuthenticated, userControl
 /**
  * API examples routes.
  */
-//app.get('/api', apiController.getApi);
-/*
-app.get('/api/github', passportConfig.isAuthenticated, passportConfig.isAuthorized, apiController.getGithub);
+app.get('/api', apiController.getApi);
+/*app.get('/api/github', passportConfig.isAuthenticated, passportConfig.isAuthorized, apiController.getGithub);
 app.get('/api/twitter', passportConfig.isAuthenticated, passportConfig.isAuthorized, apiController.getTwitter);
-app.post('/api/twitter', passportConfig.isAuthenticated, passportConfig.isAuthorized, apiController.postTwitter);
+app.post('/api/twitter', passportConfig.isAuthenticated, passportConfig.isAuthorized, apiController.postTwitter);*/
 app.get('/api/upload', apiController.getFileUpload);
 app.post('/api/upload', upload.single('myFile'), apiController.postFileUpload);
-*/
+
 /**
  * OAuth authentication routes. (Sign in)
  */
