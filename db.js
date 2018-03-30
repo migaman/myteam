@@ -6,6 +6,7 @@ const url = require('url')
 const params = url.parse(process.env.DATABASE_URL);
 const auth = params.auth.split(':');
 
+//pg-pool doesn't acceppt database_url: https://github.com/brianc/node-pg-pool
 const config = {
 	user: auth[0],
 	password: auth[1],
@@ -18,7 +19,7 @@ const config = {
 const pool = new Pool(config);
 
 
-//Doku für dies: https://github.com/brianc/node-pg-pool
+
 module.exports = {
 
 	selectUserAccountByEmail: function (email, cb) {
@@ -45,6 +46,23 @@ module.exports = {
 			cb(err, rows);
 		})
 	},
+
+	deleteUserAccount: function (idaccount, cb) {
+		var sql = "DELETE FROM mt_account WHERE idaccount = $1";
+		pool.query(sql, [idaccount], (err, rows) => {
+			if (err) throw err;
+			cb(err, rows);
+		})
+	},
+
+
+	selectAllUsers: function (cb) {
+		var sql = "SELECT array_to_json(array_agg(t)) FROM mt_account t";
+		pool.query(sql, (err, rows) => {
+			if (err) throw err;
+			cb(err, rows);
+		})
+	}
 
 
 

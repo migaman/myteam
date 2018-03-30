@@ -19,7 +19,6 @@ var User = new schemaObject({
 	google: String,
 	github: String,
 	linkedin: String,
-	steam: String,
 	tokens: Array,
 
 	profile: {

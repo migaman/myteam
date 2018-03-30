@@ -104,7 +104,14 @@ app.use(flash());
 app.use((req, res, next) => {
 	if (req.path === '/api/upload') {
 		next();
-	} else {
+	}
+	else if (req.path.startsWith('/users/deleteuser')) {
+		next();
+	}
+	else if (req.path.startsWith('/users/adduser')) {
+		next();
+	}
+	else {
 		lusca.csrf()(req, res, next);
 	}
 });
