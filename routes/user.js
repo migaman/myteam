@@ -6,6 +6,7 @@ const nodemailer = require('nodemailer');
 const passport = require('passport');
 const User = require('../models/User');
 const bcrypt = require('bcrypt-nodejs');
+var db = require('./../db');
 
 /**
  * GET /login
@@ -93,21 +94,14 @@ exports.postSignup = (req, res, next) => {
 	// Get our form values. These rely on the "name" attributes
 	var email = req.body.email;
 	var password = req.body.password;
-	var pg = req.pg;
-	var pgClient = new pg.Client({
-		connectionString: process.env.DATABASE_URL
-	});
 
-	pgClient.connect();
-	var sql = "SELECT * FROM mt_account a WHERE email = $1";
-	pgClient.query(sql, [email], (err, pgRes) => {
+	db.selectUserAccountByEmail(email, (err, rs) => {
 		if (err) {
 			throw err;
 		}
 
-		if (pgRes.rowCount) {
+		if (rs.rowCount) {
 			req.flash('errors', { msg: 'Account with that email address already exists.' });
-			pgClient.end();
 			return res.redirect('/signup');
 		}
 		else {
@@ -121,13 +115,12 @@ exports.postSignup = (req, res, next) => {
 						return next(err);
 					}
 
-					var sql = "INSERT INTO mt_account(email, password) VALUES ($1, $2) RETURNING idaccount";
-
-					pgClient.query(sql, [email, hash], (err, pgRes) => {
+					db.insertUserAccount(email, hash, (err, rs) => {
 						if (err) {
 							return next(err);
 						}
-						var idAccount = pgRes.rows[0].idaccount;
+
+						var idAccount = rs.rows[0].idaccount;
 
 						var user = new User({
 							idAccount: idAccount,
@@ -149,9 +142,8 @@ exports.postSignup = (req, res, next) => {
 
 		}
 
-
-
 	});
+
 
 
 };
