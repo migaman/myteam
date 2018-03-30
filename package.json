@@ -31,7 +31,6 @@
     "express-status-monitor": "^1.0.1",
     "express-validator": "^5.1.0",
     "github": "^14.0.0",
-    "lob": "^5.2.0",
     "log4js": "^2.5.3",
     "lusca": "^1.5.2",
     "morgan": "^1.9.0",
