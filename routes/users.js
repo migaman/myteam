@@ -9,9 +9,9 @@ var db = require('./../db');
  * GET userlist.
  */
 router.get('/userlist', function (req, res) {
-	db.selectAllUsers((err, rs) => {
+	db.selectAllUsers((err, jsonAllUsers) => {
 		if (err) throw err;
-		res.json(rs.rows[0].array_to_json);
+		res.json(jsonAllUsers);
 	});
 });
 
@@ -27,9 +27,9 @@ router.post('/adduser', function (req, res) {
 	log.info("create new user " + email);
 	var hash = 'xxxxx';
 
-	db.insertUserAccount(email, hash, (err, rs) => {
+	db.insertUserAccount(email, hash, (err, idaccount) => {
 		if (err) throw err;
-		log.debug("Insert Example erfolgreich" + rs);
+		log.debug("Insert Example erfolgreich, neue id: " + idaccount);
 		res.send({ msg: '' });
 	});
 });
@@ -43,9 +43,9 @@ router.delete('/deleteuser/:id', function (req, res) {
 	var idaccount = req.params.id;
 	log.info("Delete User Id: " + idaccount);
 
-	db.deleteUserAccount(idaccount, (err, rs) => {
+	db.deleteUserAccount(idaccount, (err) => {
 		if (err) throw err;
-		log.debug("Delete Example erfolgreich" + rs);
+		log.debug("delete user account successful");
 		res.send({ msg: '' });
 	});
 });

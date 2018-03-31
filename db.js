@@ -5,6 +5,7 @@ const url = require('url')
 
 const params = url.parse(process.env.DATABASE_URL);
 const auth = params.auth.split(':');
+var User = require.main.require('../models/User');
 
 //pg-pool doesn't acceppt database_url: https://github.com/brianc/node-pg-pool
 const config = {
@@ -24,43 +25,66 @@ module.exports = {
 
 	selectUserAccountByEmail: function (email, cb) {
 		var sql = "SELECT idaccount, email, password FROM mt_account a WHERE email = $1";
-		pool.query(sql, [email], (err, rows) => {
+		pool.query(sql, [email], (err, rs) => {
 			if (err) throw err;
-			cb(err, rows);
+			var user = null;
+
+			if (rs.rowCount) {
+				user = new User({
+					idaccount: rs.rows[0].idaccount,
+					email: rs.rows[0].email,
+					password: rs.rows[0].password
+				});
+			}
+
+			cb(err, user);
 		})
 	},
 
 	selectUserAccountById: function (idaccount, cb) {
 		var sql = "SELECT idaccount, email, password FROM mt_account a WHERE idaccount = $1";
-		pool.query(sql, [idaccount], (err, rows) => {
+		pool.query(sql, [idaccount], (err, rs) => {
 			if (err) throw err;
-			cb(err, rows);
+
+			var user = new User({
+				idaccount: rs.rows[0].idaccount,
+				email: rs.rows[0].email,
+				password: rs.rows[0].password
+			});
+
+			cb(err, user);
 		})
 	},
 
 	insertUserAccount: function (email, hash, cb) {
 
 		var sql = "INSERT INTO mt_account(email, password) VALUES ($1, $2) RETURNING idaccount";
-		pool.query(sql, [email, hash], (err, rows) => {
+		pool.query(sql, [email, hash], (err, rs) => {
 			if (err) throw err;
-			cb(err, rows);
+
+			var idaccount = rs.rows[0].idaccount;
+
+			cb(err, idaccount);
 		})
 	},
 
 	deleteUserAccount: function (idaccount, cb) {
 		var sql = "DELETE FROM mt_account WHERE idaccount = $1";
-		pool.query(sql, [idaccount], (err, rows) => {
+		pool.query(sql, [idaccount], (err) => {
 			if (err) throw err;
-			cb(err, rows);
+			cb(err);
 		})
 	},
 
 
 	selectAllUsers: function (cb) {
 		var sql = "SELECT array_to_json(array_agg(t)) FROM mt_account t";
-		pool.query(sql, (err, rows) => {
+		pool.query(sql, (err, rs) => {
 			if (err) throw err;
-			cb(err, rows);
+
+			var jsonAllUsers = rs.rows[0].array_to_json;
+
+			cb(err, jsonAllUsers);
 		})
 	}
 

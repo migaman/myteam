@@ -7,7 +7,7 @@ var schemaObject = require('schema-object');
 
 // Create User schema 
 var User = new schemaObject({
-	idAccount: Number,
+	idaccount: Number,
 	email: String,
 	password: String,
 	passwordResetToken: String,

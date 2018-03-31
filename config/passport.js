@@ -12,18 +12,12 @@ const User = require('../models/User');
 var db = require('./../db');
 
 passport.serializeUser((user, done) => {
-	done(null, user.idAccount);
+	done(null, user.idaccount);
 });
 
 passport.deserializeUser((id, done) => {
 
-	db.selectUserAccountById(id, (err, rs) => {
-		const user = new User({
-			idAccount: rs.rows[0].idaccount,
-			email: rs.rows[0].email,
-			password: rs.rows[0].password
-		});
-
+	db.selectUserAccountById(id, (err, user) => {
 		done(err, user);
 	});
 
@@ -35,18 +29,12 @@ passport.deserializeUser((id, done) => {
  */
 passport.use(new LocalStrategy({ usernameField: 'email' }, (email, password, done) => {
 
-	db.selectUserAccountByEmail(email.toLowerCase(), (err, rs) => {
+	db.selectUserAccountByEmail(email.toLowerCase(), (err, user) => {
 		if (err) { return done(err); }
-		if (!rs.rowCount) {
+		if (user === null) {
 			return done(null, false, { msg: `Email ${email} not found.` });
 		}
 		else {
-			var user = new User({
-				idAccount: rs.rows[0].idaccount,
-				email: rs.rows[0].email,
-				password: rs.rows[0].password
-			});
-
 			bcrypt.compare(password, user.password, (err, isMatch) => {
 				if (err) {
 					return done(err);

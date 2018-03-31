@@ -95,12 +95,12 @@ exports.postSignup = (req, res, next) => {
 	var email = req.body.email;
 	var password = req.body.password;
 
-	db.selectUserAccountByEmail(email, (err, rs) => {
+	db.selectUserAccountByEmail(email, (err, user) => {
 		if (err) {
 			throw err;
 		}
 
-		if (rs.rowCount) {
+		if (user !== null) {
 			req.flash('errors', { msg: 'Account with that email address already exists.' });
 			return res.redirect('/signup');
 		}
@@ -115,15 +115,13 @@ exports.postSignup = (req, res, next) => {
 						return next(err);
 					}
 
-					db.insertUserAccount(email, hash, (err, rs) => {
+					db.insertUserAccount(email, hash, (err, idaccount) => {
 						if (err) {
 							return next(err);
 						}
 
-						var idAccount = rs.rows[0].idaccount;
-
 						var user = new User({
-							idAccount: idAccount,
+							idaccount: idaccount,
 							email: req.body.email,
 							password: req.body.password
 						});
@@ -173,7 +171,7 @@ exports.postUpdateProfile = (req, res, next) => {
 		return res.redirect('/account');
 	}
 
-	User.findById(req.user.id, (err, user) => {
+	db.selectUserAccountById(req.user.idaccount, (err, user) => {
 		if (err) { return next(err); }
 		user.email = req.body.email || '';
 		user.profile.name = req.body.name || '';
