@@ -22,7 +22,12 @@ CREATE TABLE mt_account
 (
 	  idaccount	SERIAL
 	, email		VARCHAR(100)	NOT NULL	UNIQUE 
-	, password	VARCHAR(100)
+	, password	VARCHAR(100)	
+	, username	VARCHAR(100)	NULL
+    , gender	VARCHAR(100)	NULL
+    , location  VARCHAR(100)	NULL
+    , website   VARCHAR(100)	NULL
+	, picture   VARCHAR(100)	NULL
 	, createdat TIMESTAMPTZ NOT NULL DEFAULT NOW()
 	, updatedat TIMESTAMPTZ NOT NULL DEFAULT NOW()
 );

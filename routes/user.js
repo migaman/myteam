@@ -178,7 +178,7 @@ exports.postUpdateProfile = (req, res, next) => {
 		user.profile.gender = req.body.gender || '';
 		user.profile.location = req.body.location || '';
 		user.profile.website = req.body.website || '';
-		user.save((err) => {
+		db.updatetUserAccount(user, (err) => {
 			if (err) {
 				if (err.code === 11000) {
 					req.flash('errors', { msg: 'The email address you have entered is already associated with an account.' });
