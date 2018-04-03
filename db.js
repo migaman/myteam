@@ -100,6 +100,21 @@ module.exports = {
 		})
 	},
 
+	updatetUserAccountPassword: function (user, cb) {
+		var sql = `UPDATE mt_account SET 
+					password = $1
+					 WHERE idaccount = $2`;
+		pool.query(sql, [user.password, user.idaccount], (err) => {
+			if (err) {
+				cb(err);
+			}
+			else {
+				cb();
+			}
+
+		})
+	},
+
 	deleteUserAccount: function (idaccount, cb) {
 		var sql = "DELETE FROM mt_account WHERE idaccount = $1";
 		pool.query(sql, [idaccount], (err) => {

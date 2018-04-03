@@ -105,37 +105,32 @@ exports.postSignup = (req, res, next) => {
 			return res.redirect('/signup');
 		}
 		else {
-
-			bcrypt.genSalt(10, (err, salt) => {
+			user = new User();
+			user.generatePasswordHash(password, (err, hash) => {
 				if (err) {
 					return next(err);
 				}
-				bcrypt.hash(password, salt, null, (err, hash) => {
+
+				db.insertUserAccount(email, hash, (err, idaccount) => {
 					if (err) {
 						return next(err);
 					}
 
-					db.insertUserAccount(email, hash, (err, idaccount) => {
+					var user = new User({
+						idaccount: idaccount,
+						email: req.body.email,
+						password: req.body.password
+					});
+
+					req.logIn(user, (err) => {
 						if (err) {
 							return next(err);
 						}
-
-						var user = new User({
-							idaccount: idaccount,
-							email: req.body.email,
-							password: req.body.password
-						});
-
-						req.logIn(user, (err) => {
-							if (err) {
-								return next(err);
-							}
-							res.redirect('/');
-						});
-
+						res.redirect('/');
 					});
 
 				});
+
 			});
 
 		}
@@ -207,13 +202,17 @@ exports.postUpdatePassword = (req, res, next) => {
 		return res.redirect('/account');
 	}
 
-	User.findById(req.user.id, (err, user) => {
+	db.selectUserAccountById(req.user.idaccount, (err, user) => {
 		if (err) { return next(err); }
 		user.password = req.body.password;
-		user.save((err) => {
-			if (err) { return next(err); }
-			req.flash('success', { msg: 'Password has been changed.' });
-			res.redirect('/account');
+
+		user.generatePasswordHash(user.password, (err, hash) => {
+			user.password = hash;
+			db.updatetUserAccountPassword(user, (err) => {
+				if (err) { return next(err); }
+				req.flash('success', { msg: 'Password has been changed.' });
+				res.redirect('/account');
+			});
 		});
 	});
 };

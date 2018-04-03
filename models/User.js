@@ -57,11 +57,25 @@ var User = new schemaObject({
 			}
 
 
+			,
 
+			generatePasswordHash: function (candidatePassword, cb) {
+				bcrypt.genSalt(10, (err, salt) => {
+					if (err) {
+						return cb(err);
+					}
+
+					bcrypt.hash(candidatePassword, salt, null, (err, hash) => {
+						if (err) {
+							return cb(err);
+						}
+						cb(err, hash);
+					});
+				});
+
+			}
 		}
-
 	}
-
 );
 
 
