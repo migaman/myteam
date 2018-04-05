@@ -1,3 +1,7 @@
+DROP TABLE IF EXISTS mt_session;
+DROP TABLE IF EXISTS mt_account;
+
+
 CREATE TABLE mt_session (
 	"sid" varchar NOT NULL COLLATE "default",
 	"sess" json NOT NULL,
@@ -17,6 +21,8 @@ CREATE TABLE mt_account
     , location  VARCHAR(100)	NULL
     , website   VARCHAR(100)	NULL
 	, picture   VARCHAR(100)	NULL
+	, passwordresettoken	VARCHAR(100)	NULL
+	, passwordresetexpires	TIMESTAMPTZ		NULL
 	, createdat TIMESTAMPTZ NOT NULL DEFAULT NOW()
 	, updatedat TIMESTAMPTZ NOT NULL DEFAULT NOW()
 );

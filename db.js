@@ -52,14 +52,44 @@ module.exports = {
 				cb(err);
 			}
 			else {
-				var user = new User();
-				user.idaccount = rs.rows[0].idaccount;
-				user.email = rs.rows[0].email;
-				user.password = rs.rows[0].password;
-				user.profile.name = rs.rows[0].username;
-				user.profile.location = rs.rows[0].location;
-				user.profile.gender = rs.rows[0].gender;
-				user.profile.website = rs.rows[0].website;
+				var user = null;
+
+				if (rs.rowCount) {
+					user = new User();
+					user.idaccount = rs.rows[0].idaccount;
+					user.email = rs.rows[0].email;
+					user.password = rs.rows[0].password;
+					user.profile.name = rs.rows[0].username;
+					user.profile.location = rs.rows[0].location;
+					user.profile.gender = rs.rows[0].gender;
+					user.profile.website = rs.rows[0].website;
+				}
+
+				cb(err, user);
+			}
+		})
+	},
+
+	selectUserAccountByResetToken: function (passwordresettoken, passwordresetexpires, cb) {
+
+		var sql = "SELECT idaccount, email, password, username, gender, location, website FROM mt_account a WHERE passwordresettoken = $1 AND passwordresetexpires >= $2";
+		pool.query(sql, [passwordresettoken, passwordresetexpires], (err, rs) => {
+			if (err) {
+				cb(err);
+			}
+			else {
+				var user = null;
+
+				if (rs.rowCount) {
+					user = new User();
+					user.idaccount = rs.rows[0].idaccount;
+					user.email = rs.rows[0].email;
+					user.password = rs.rows[0].password;
+					user.profile.name = rs.rows[0].username;
+					user.profile.location = rs.rows[0].location;
+					user.profile.gender = rs.rows[0].gender;
+					user.profile.website = rs.rows[0].website;
+				}
 
 				cb(err, user);
 			}
@@ -105,6 +135,39 @@ module.exports = {
 					password = $1
 					 WHERE idaccount = $2`;
 		pool.query(sql, [user.password, user.idaccount], (err) => {
+			if (err) {
+				cb(err);
+			}
+			else {
+				cb();
+			}
+
+		})
+	},
+
+	updatetUserAccountPasswordViaReset: function (user, cb) {
+		var sql = `UPDATE mt_account SET 
+					password = $1
+					, passwordResetToken = null
+					, passwordResetExpires = null
+					 WHERE idaccount = $2`;
+		pool.query(sql, [user.password, user.idaccount], (err) => {
+			if (err) {
+				cb(err);
+			}
+			else {
+				cb();
+			}
+
+		})
+	},
+
+	updatetUserAccountPasswordReset: function (user, cb) {
+		var sql = `UPDATE mt_account SET 
+					  passwordResetToken = $1
+					, passwordResetExpires = $2
+					WHERE idaccount = $3`;
+		pool.query(sql, [user.passwordResetToken, user.passwordResetExpires, user.idaccount], (err) => {
 			if (err) {
 				cb(err);
 			}

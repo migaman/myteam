@@ -73,7 +73,7 @@ describe('samplee2etest', function () {
 		var application_host = 'http://localhost:3000';
 
 		await driver.get(application_host);
-		await driver.wait(until.titleIs('Home - Hackathon Starter'), 1000);
+		await driver.wait(until.titleIs('Home - myTeam'), 1000);
 		await driver.findElement(By.css('body'));
 		await driver.findElement(By.css('body > div > h1'));
 
@@ -82,10 +82,10 @@ describe('samplee2etest', function () {
 		assert.equal(url, "http://localhost:3000/");
 
 		var title = await driver.getTitle();
-		assert.equal(title, "Home - Hackathon Starter");
+		assert.equal(title, "Home - myTeam");
 
 		var titleH1 = await driver.findElement(By.css('body > div > h1')).getText();
-		assert.equal(titleH1, "Hackathon Starter");
+		assert.equal(titleH1, "myTeam");
 
 		var welcome = await driver.findElement(By.css('body > div > p')).getText();
 		assert.equal(welcome, "A boilerplate for Node.js web applications.");
