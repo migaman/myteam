@@ -296,7 +296,7 @@ exports.postReset = (req, res, next) => {
 			}
 
 
-			user.generatePasswordHash(user.password, (err, hash) => {
+			user.generatePasswordHash(req.body.password, (err, hash) => {
 				user.password = hash;
 				user.passwordResetToken = undefined;
 				user.passwordResetExpires = undefined;
