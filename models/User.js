@@ -15,10 +15,7 @@ var User = new schemaObject({
 	createdAt: Date,
 	updatedAt: Date,
 
-	twitter: String,
-	google: String,
 	github: String,
-	linkedin: String,
 	tokens: Array,
 
 	profile: {
