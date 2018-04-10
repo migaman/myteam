@@ -2,10 +2,10 @@
 
 const passport = require('passport');
 const LocalStrategy = require('passport-local').Strategy;
-//const GitHubStrategy = require('passport-github').Strategy;
+const GitHubStrategy = require('passport-github').Strategy;
 
 const bcrypt = require('bcrypt-nodejs');
-
+var User = require.main.require('../models/User');
 var db = require('./../db');
 
 passport.serializeUser((user, done) => {
@@ -69,63 +69,71 @@ passport.use(new LocalStrategy({ usernameField: 'email' }, (email, password, don
 /**
  * Sign in with GitHub.
  */
-/*
- passport.use(new GitHubStrategy({
-  clientID: process.env.GITHUB_ID,
-  clientSecret: process.env.GITHUB_SECRET,
-  callbackURL: '/auth/github/callback',
-  passReqToCallback: true
+
+passport.use(new GitHubStrategy({
+	clientID: process.env.GITHUB_ID,
+	clientSecret: process.env.GITHUB_SECRET,
+	callbackURL: '/auth/github/callback',
+	passReqToCallback: true
 }, (req, accessToken, refreshToken, profile, done) => {
-  if (req.user) {
-    User.findOne({ github: profile.id }, (err, existingUser) => {
-      if (existingUser) {
-        req.flash('errors', { msg: 'There is already a GitHub account that belongs to you. Sign in with that account or delete it, then link it with your current account.' });
-        done(err);
-      } else {
-        User.findById(req.user.id, (err, user) => {
-          if (err) { return done(err); }
-          user.github = profile.id;
-          user.tokens.push({ kind: 'github', accessToken });
-          user.profile.name = user.profile.name || profile.displayName;
-          user.profile.picture = user.profile.picture || profile._json.avatar_url;
-          user.profile.location = user.profile.location || profile._json.location;
-          user.profile.website = user.profile.website || profile._json.blog;
-          user.save((err) => {
-            req.flash('info', { msg: 'GitHub account has been linked.' });
-            done(err, user);
-          });
-        });
-      }
-    });
-  } else {
-    User.findOne({ github: profile.id }, (err, existingUser) => {
-      if (err) { return done(err); }
-      if (existingUser) {
-        return done(null, existingUser);
-      }
-      User.findOne({ email: profile._json.email }, (err, existingEmailUser) => {
-        if (err) { return done(err); }
-        if (existingEmailUser) {
-          req.flash('errors', { msg: 'There is already an account using this email address. Sign in to that account and link it with GitHub manually from Account Settings.' });
-          done(err);
-        } else {
-          const user = new User();
-          user.email = profile._json.email;
-          user.github = profile.id;
-          user.tokens.push({ kind: 'github', accessToken });
-          user.profile.name = profile.displayName;
-          user.profile.picture = profile._json.avatar_url;
-          user.profile.location = profile._json.location;
-          user.profile.website = profile._json.blog;
-          user.save((err) => {
-            done(err, user);
-          });
-        }
-      });
-    });
-  }
+
+	if (req.user) {
+		db.selectUserAccountByGithubId(profile.id, (err, existingUser) => {
+			if (existingUser !== null) {
+				req.flash('errors', { msg: 'There is already a GitHub account that belongs to you. Sign in with that account or delete it, then link it with your current account.' });
+				done(err);
+			} else {
+
+				db.selectUserAccountById(req.user.idaccount, (err, user) => {
+					if (err) {
+						return done(err);
+					}
+					user.github = profile.id;
+					user.githubaccesstoken = accessToken;
+					user.profile.name = user.profile.name || profile.displayName;
+					user.profile.picture = user.profile.picture || profile._json.avatar_url;
+					user.profile.location = user.profile.location || profile._json.location;
+					user.profile.website = user.profile.website || profile._json.blog;
+
+					db.updatetUserAccountGitHub(user, (err) => {
+						//user.save((err) => {
+						req.flash('info', { msg: 'GitHub account has been linked.' });
+						done(err, user);
+					});
+				});
+			}
+		});
+	} else {
+		db.selectUserAccountByGithubId(profile.id, (err, existingUser) => {
+			if (err) { return done(err); }
+			if (existingUser !== null) {
+				return done(null, existingUser);
+			}
+
+			//E-Mail field is empty if it is private in github account
+			db.selectUserAccountByEmail(profile._json.email, (err, existingEmailUser) => {
+				if (err) { return done(err); }
+				if (existingEmailUser != null) {
+					req.flash('errors', { msg: 'There is already an account using this email address. Sign in to that account and link it with GitHub manually from Account Settings.' });
+					done(err);
+				} else {
+					var user = new User();
+					user.email = profile._json.email;
+					user.github = profile.id;
+					user.githubaccesstoken = accessToken;
+					user.profile.name = profile.displayName;
+					user.profile.picture = profile._json.avatar_url;
+					user.profile.location = profile._json.location;
+					user.profile.website = profile._json.blog;
+					db.insertUserAccountGitHub(user, (err, idaccount) => {
+						user.idaccount = idaccount;
+						done(err, user);
+					});
+				}
+			});
+		});
+	}
 }));
-*/
 
 
 /**

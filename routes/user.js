@@ -220,7 +220,7 @@ exports.postUpdatePassword = (req, res, next) => {
  * Delete user account.
  */
 exports.postDeleteAccount = (req, res, next) => {
-	db.deleteUserAccount(req.user.id, (err) => {
+	db.deleteUserAccount(req.user.idaccount, (err) => {
 		if (err) { return next(err); }
 		req.logout();
 		req.flash('info', { msg: 'Your account has been deleted.' });
@@ -234,7 +234,7 @@ exports.postDeleteAccount = (req, res, next) => {
  */
 exports.getOauthUnlink = (req, res, next) => {
 	const provider = req.params.provider;
-	User.findById(req.user.id, (err, user) => {
+	User.findById(req.user.idaccount, (err, user) => {
 		if (err) { return next(err); }
 		user[provider] = undefined;
 		user.tokens = user.tokens.filter(token => token.kind !== provider);

@@ -14,18 +14,23 @@ ALTER TABLE mt_session ADD CONSTRAINT "session_pkey" PRIMARY KEY ("sid") NOT DEF
 CREATE TABLE mt_account
 (
 	  idaccount	SERIAL
-	, email		VARCHAR(100)	NOT NULL	UNIQUE 
-	, password	VARCHAR(100)	
+	, email		VARCHAR(100)	NULL 
+	, password	VARCHAR(100)	NULL
 	, username	VARCHAR(100)	NULL
     , gender	VARCHAR(100)	NULL
     , location  VARCHAR(100)	NULL
     , website   VARCHAR(100)	NULL
 	, picture   VARCHAR(100)	NULL
+	, github   VARCHAR(100)	NULL
+	, githubaccesstoken   VARCHAR(100)	NULL
 	, passwordresettoken	VARCHAR(100)	NULL
 	, passwordresetexpires	TIMESTAMPTZ		NULL
 	, createdat TIMESTAMPTZ NOT NULL DEFAULT NOW()
 	, updatedat TIMESTAMPTZ NOT NULL DEFAULT NOW()
 );
+
+CREATE UNIQUE INDEX account_email_uni_idx ON mt_account (email) WHERE email IS NOT NULL;
+CREATE UNIQUE INDEX account_github_uni_idx ON mt_account (github) WHERE github IS NOT NULL;
 
 INSERT INTO mt_account(email, password) VALUES ('test1@test.ch', '$2a$10$Tueru7iaKxPhErbmlGjO7.LtpM7fAMuabvqWIZYggns567bMVxy1O');
 INSERT INTO mt_account(email, password) VALUES ('test2@test.ch', '$2a$10$gfTlazVqZSMAJX5YgXC/3u4yS3PYKoyBDeYfQDiyitJDrS2QogsVO');

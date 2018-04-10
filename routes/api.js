@@ -1,7 +1,5 @@
 "use strict";
 
-//const GitHub = require('github');
-
 
 /**
  * GET /api
@@ -13,20 +11,6 @@ exports.getApi = (req, res) => {
 	});
 };
 
-/**
- * GET /api/github
- * GitHub API Example.
- */
-/*exports.getGithub = (req, res, next) => {
-	const github = new GitHub();
-	github.repos.get({ owner: 'sahat', repo: 'hackathon-starter' }, (err, repo) => {
-		if (err) { return next(err); }
-		res.render('api/github', {
-			title: 'GitHub API',
-			repo
-		});
-	});
-};*/
 
 
 /**

@@ -70,6 +70,31 @@ module.exports = {
 		})
 	},
 
+	selectUserAccountByGithubId: function (idprofile, cb) {
+		var sql = "SELECT idaccount, email, password, username, gender, location, website FROM mt_account a WHERE github = $1";
+		pool.query(sql, [idprofile], (err, rs) => {
+			if (err) {
+				cb(err);
+			}
+			else {
+				var user = null;
+
+				if (rs.rowCount) {
+					user = new User();
+					user.idaccount = rs.rows[0].idaccount;
+					user.email = rs.rows[0].email;
+					user.password = rs.rows[0].password;
+					user.profile.name = rs.rows[0].username;
+					user.profile.location = rs.rows[0].location;
+					user.profile.gender = rs.rows[0].gender;
+					user.profile.website = rs.rows[0].website;
+				}
+
+				cb(err, user);
+			}
+		})
+	},
+
 	selectUserAccountByResetToken: function (passwordresettoken, passwordresetexpires, cb) {
 
 		var sql = "SELECT idaccount, email, password, username, gender, location, website FROM mt_account a WHERE passwordresettoken = $1 AND passwordresetexpires >= $2";
@@ -111,6 +136,21 @@ module.exports = {
 		})
 	},
 
+	insertUserAccountGitHub: function (user, cb) {
+
+		var sql = "INSERT INTO mt_account(email, github, githubaccesstoken, username) VALUES ($1, $2, $3, $4) RETURNING idaccount";
+		pool.query(sql, [user.email, user.github, user.githubaccesstoken, user.profile.name], (err, rs) => {
+			if (err) {
+				cb(err);
+			}
+			else {
+				var idaccount = rs.rows[0].idaccount;
+				cb(err, idaccount);
+			}
+
+		})
+	},
+
 	updatetUserAccount: function (user, cb) {
 		var sql = `UPDATE mt_account SET 
 					email = $1
@@ -120,6 +160,25 @@ module.exports = {
 					, website   = $5
 					 WHERE idaccount = $6`;
 		pool.query(sql, [user.email, user.profile.name, user.profile.gender, user.profile.location, user.profile.website, user.idaccount], (err) => {
+			if (err) {
+				cb(err);
+			}
+			else {
+				cb();
+			}
+
+		})
+	},
+
+	updatetUserAccountGitHub: function (user, cb) {
+		var sql = `UPDATE mt_account SET 
+					email = $1
+					, github = $2
+					, githubaccesstoken	= $3
+					, username  = $4
+					, website   = $5
+					 WHERE idaccount = $6`;
+		pool.query(sql, [user.email, user.github, user.githubaccesstoken, user.profile.name, user.profile.website, user.idaccount], (err) => {
 			if (err) {
 				cb(err);
 			}
