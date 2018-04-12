@@ -24,7 +24,7 @@ const pool = new Pool(config);
 module.exports = {
 
 	selectUserAccountByEmail: function (email, cb) {
-		var sql = "SELECT idaccount, email, password FROM mt_account a WHERE email = $1";
+		var sql = "SELECT idaccount, email, password FROM mt_account a WHERE email = $1 and email is not null";
 		pool.query(sql, [email], (err, rs) => {
 			if (err) {
 				cb(err);

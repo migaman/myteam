@@ -77,7 +77,9 @@ passport.use(new GitHubStrategy({
 	passReqToCallback: true
 }, (req, accessToken, refreshToken, profile, done) => {
 
+	//Check if user is already logged in
 	if (req.user) {
+		//Link GitHub Account to existing account
 		db.selectUserAccountByGithubId(profile.id, (err, existingUser) => {
 			if (existingUser !== null) {
 				req.flash('errors', { msg: 'There is already a GitHub account that belongs to you. Sign in with that account or delete it, then link it with your current account.' });
@@ -96,23 +98,33 @@ passport.use(new GitHubStrategy({
 					user.profile.website = user.profile.website || profile._json.blog;
 
 					db.updatetUserAccountGitHub(user, (err) => {
-						//user.save((err) => {
-						req.flash('info', { msg: 'GitHub account has been linked.' });
-						done(err, user);
+						if (err) {
+							return done(err);
+						}
+						else {
+							req.flash('info', { msg: 'GitHub account has been linked.' });
+							done(err, user);
+						}
+
 					});
 				});
 			}
 		});
 	} else {
+		//Login with existing account or create a new account
 		db.selectUserAccountByGithubId(profile.id, (err, existingUser) => {
 			if (err) { return done(err); }
 			if (existingUser !== null) {
+				//Login with existing account
 				return done(null, existingUser);
 			}
 
-			//E-Mail field is empty if it is private in github account
+			//Check if E-Mail address of github account is already in use
+			//Attention: E-Mail field is empty if it is private in github account
 			db.selectUserAccountByEmail(profile._json.email, (err, existingEmailUser) => {
-				if (err) { return done(err); }
+				if (err) {
+					return done(err);
+				}
 				if (existingEmailUser != null) {
 					req.flash('errors', { msg: 'There is already an account using this email address. Sign in to that account and link it with GitHub manually from Account Settings.' });
 					done(err);
