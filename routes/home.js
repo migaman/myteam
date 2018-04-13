@@ -2,19 +2,22 @@
 var express = require('express');
 var router = express.Router();
 var log = require('log4js').getLogger("index");
+//Needs feature Dyno Metadata (https://stackoverflow.com/questions/7917523/how-do-i-access-the-current-heroku-release-version-programmatically)
+var version = process.env.HEROKU_RELEASE_VERSION;
 
 
 /* GET home page. */
 router.get('/', function (req, res) {
 	log.debug("This is in the index module");
 	res.render('home', {
-		title: 'Home'
+		title: 'Home',
+		version: 'Release ' + version
 	});
 });
 
 /* GET REST Example-page. */
 router.get('/rest', function (req, res) {
-	res.render('rest', { title: 'Rest Example' });
+	res.render('rest', { title: 'Rest Examples' });
 });
 
 /* GET list of events page */

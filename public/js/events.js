@@ -43,6 +43,10 @@ function populateTable() {
 			else if (this.status === statusEnum.maybe) {
 				tableContent += '<td><span class="label label-pill label-warning">MAYBE</span></td>';
 			}
+			else {
+				//status not defined yet
+				tableContent += '<td><span class="label label-pill label-default">?</span></td>';
+			}
 
 			tableContent += '</tr>';
 

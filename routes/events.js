@@ -9,7 +9,7 @@ var db = require('./../db');
  * GET userlist.
  */
 router.get('/eventlist', function (req, res) {
-	db.selectAppointment((err, appointments) => {
+	db.selectAppointment(req.user.idaccount, (err, appointments) => {
 		if (err) {
 			throw err;
 		}

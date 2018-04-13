@@ -88,7 +88,7 @@ describe('samplee2etest', function () {
 		assert.equal(titleH1, "myTeam");
 
 		var welcome = await driver.findElement(By.css('body > div > p')).getText();
-		assert.equal(welcome, "A boilerplate for Node.js web applications.");
+		assert.equal(welcome, "Planning events for your sport team.");
 
 
 	});

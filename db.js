@@ -264,9 +264,15 @@ module.exports = {
 		})
 	},
 
-	selectAppointment: function (cb) {
-		var sql = "SELECT idappointment, startdate, enddate, description FROM mt_appointment";
-		pool.query(sql, (err, rs) => {
+	selectAppointment: function (idaccount, cb) {
+		var sql = `SELECT a.idappointment, a.startdate, a.enddate, a.description, pa.idparticipationstatus
+			FROM mt_appointment a
+			LEFT OUTER JOIN mt_playerappointment pa ON a.idappointment = pa.idappointment
+			LEFT OUTER JOIN mt_player pla ON pa.idplayer = pla.idplayer
+			LEFT OUTER JOIN mt_account acc ON pla.idaccount = acc.idaccount
+			WHERE acc.idaccount = $1`;
+
+		pool.query(sql, [idaccount], (err, rs) => {
 			if (err) {
 				cb(err);
 			}
@@ -281,7 +287,7 @@ module.exports = {
 						appointment.startdate = rs.rows[i].startdate;
 						appointment.enddate = rs.rows[i].enddate;
 						appointment.description = rs.rows[i].description;
-						appointment.status = i % 3 + 1;
+						appointment.status = rs.rows[i].idparticipationstatus;
 						appointments.push(appointment);
 					}
 

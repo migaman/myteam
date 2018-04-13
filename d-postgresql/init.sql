@@ -80,9 +80,9 @@ INSERT INTO mt_account(email, password) VALUES ('test2@test.ch', '$2a$10$gfTlazV
 INSERT INTO mt_account(email, password) VALUES ('test3@test.ch', '$2a$10$5ueCHAab.vj/19UK2Wq7w.6bkgC1De1c9urfo5knugfjFY4AaH71S');
 
 
-INSERT INTO mt_player(firstname, lastname, idaccount) VALUES ('David', 'Zibung', NULL);
-INSERT INTO mt_player(firstname, lastname, idaccount) VALUES ('Lazar', 'Cirkovic', NULL);
-INSERT INTO mt_player(firstname, lastname, idaccount) VALUES ('Stefan', 'Knezevic', NULL);
+INSERT INTO mt_player(firstname, lastname, idaccount) VALUES ('David', 'Zibung', 1);
+INSERT INTO mt_player(firstname, lastname, idaccount) VALUES ('Lazar', 'Cirkovic', 2);
+INSERT INTO mt_player(firstname, lastname, idaccount) VALUES ('Stefan', 'Knezevic', 3);
 INSERT INTO mt_player(firstname, lastname, idaccount) VALUES ('Lucas', 'Alves', NULL);
 INSERT INTO mt_player(firstname, lastname, idaccount) VALUES ('Nicolas', 'Schindelholz', NULL);
 
@@ -90,6 +90,8 @@ INSERT INTO mt_player(firstname, lastname, idaccount) VALUES ('Nicolas', 'Schind
 INSERT INTO mt_appointment (startdate, enddate, description) VALUES ('2018-04-13 19:30', '2018-04-13 21:30', 'FC Meggen - FC Adligenswil');
 INSERT INTO mt_appointment (startdate, enddate, description) VALUES ('2018-04-20 19:30', '2018-04-20 21:30', 'Inter Altstadt - FC Meggen');
 INSERT INTO mt_appointment (startdate, enddate, description) VALUES ('2018-04-27 19:30', '2018-04-27 21:30', 'OG Kickers - FC Meggen');
+INSERT INTO mt_appointment (startdate, enddate, description) VALUES ('2018-05-04 19:30', '2018-05-04 21:30', 'Sins - FC Meggen');
+INSERT INTO mt_appointment (startdate, enddate, description) VALUES ('2018-05-11 19:30', '2018-05-11 21:30', 'FC Horw - FC Meggen');
 
 
 INSERT INTO mt_participationstatus (idparticipationstatus, participationstatus) VALUES (1, 'Yes');
@@ -114,3 +116,6 @@ INSERT INTO mt_playerappointment (idappointment, idplayer, idparticipationstatus
 INSERT INTO mt_playerappointment (idappointment, idplayer, idparticipationstatus) VALUES (3, 3, 1);
 INSERT INTO mt_playerappointment (idappointment, idplayer, idparticipationstatus) VALUES (3, 4, 1);
 INSERT INTO mt_playerappointment (idappointment, idplayer, idparticipationstatus) VALUES (3, 5, 1);
+
+INSERT INTO mt_playerappointment (idappointment, idplayer, idparticipationstatus) VALUES (4, 1, 2);
+INSERT INTO mt_playerappointment (idappointment, idplayer, idparticipationstatus) VALUES (5, 1, 3);
