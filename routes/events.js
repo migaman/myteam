@@ -2,7 +2,6 @@
 
 var express = require('express');
 var router = express.Router();
-var log = require('log4js').getLogger("index");
 var db = require('./../db');
 
 
