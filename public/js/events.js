@@ -20,6 +20,8 @@ function populateTable() {
 	// Empty content string
 	var tableContent = '';
 
+	var statusEnum = Object.freeze({ "yes": 1, "no": 2, "maybe": 3 })
+
 	// jQuery AJAX call for JSON
 	$.getJSON('/events/eventlist', function (data) {
 
@@ -30,9 +32,18 @@ function populateTable() {
 		$.each(data, function () {
 			tableContent += '<tr>';
 			tableContent += '<td><a href="#" class="linkshowuser" rel="' + this.description + '">' + this.description + '</a></td>';
-			tableContent += '<td><a href="#" class="linkshowuser" rel="' + this.startdate + '">' + this.startdate + '</a></td>';
-			tableContent += '<td><a href="#" class="linkshowuser" rel="' + this.enddate + '">' + this.enddate + '</a></td>';
-			tableContent += '<td><a href="#" class="linkdeleteuser" rel="' + this.idappointment + '">status</a></td>';
+			tableContent += '<td>' + this.startdate.replace('T', ' ').substr(0, 19) + '</td>';
+			tableContent += '<td>' + this.enddate.replace('T', ' ').substr(0, 19) + '</td>';
+			if (this.status === statusEnum.yes) {
+				tableContent += '<td><span class="label label-pill label-success">YES</span></td>';
+			}
+			else if (this.status === statusEnum.no) {
+				tableContent += '<td><span class="label label-pill label-danger">NO</span></td>';
+			}
+			else if (this.status === statusEnum.maybe) {
+				tableContent += '<td><span class="label label-pill label-warning">MAYBE</span></td>';
+			}
+
 			tableContent += '</tr>';
 
 		});

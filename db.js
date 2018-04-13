@@ -281,6 +281,7 @@ module.exports = {
 						appointment.startdate = rs.rows[i].startdate;
 						appointment.enddate = rs.rows[i].enddate;
 						appointment.description = rs.rows[i].description;
+						appointment.status = i % 3 + 1;
 						appointments.push(appointment);
 					}
 

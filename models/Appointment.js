@@ -8,7 +8,8 @@ var appointment = new schemaObject({
 	idappointment: String,
 	startdate: Date,
 	enddate: Date,
-	description: String
+	description: String,
+	status: Number
 });
 
 
