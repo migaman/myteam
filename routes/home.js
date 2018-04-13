@@ -17,5 +17,10 @@ router.get('/rest', function (req, res) {
 	res.render('rest', { title: 'Rest Example' });
 });
 
+/* GET list of events page */
+router.get('/events', function (req, res) {
+	res.render('events', { title: 'Events' });
+});
+
 
 module.exports = router;

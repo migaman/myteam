@@ -6,6 +6,7 @@ const url = require('url')
 const params = url.parse(process.env.DATABASE_URL);
 const auth = params.auth.split(':');
 var User = require.main.require('../models/User');
+var Appointment = require.main.require('../models/Appointment');
 
 //pg-pool doesn't acceppt database_url: https://github.com/brianc/node-pg-pool
 const config = {
@@ -261,7 +262,36 @@ module.exports = {
 				cb(err, jsonAllUsers);
 			}
 		})
+	},
+
+	selectAppointment: function (cb) {
+		var sql = "SELECT idappointment, startdate, enddate, description FROM mt_appointment";
+		pool.query(sql, (err, rs) => {
+			if (err) {
+				cb(err);
+			}
+			else {
+				var appointment = null;
+
+				if (rs.rowCount) {
+					var appointments = [];
+					for (var i = 0; i < rs.rowCount; i++) {
+						appointment = new Appointment();
+						appointment.idappointment = rs.rows[i].idappointment;
+						appointment.startdate = rs.rows[i].startdate;
+						appointment.enddate = rs.rows[i].enddate;
+						appointment.description = rs.rows[i].description;
+						appointments.push(appointment);
+					}
+
+				}
+
+				cb(err, appointments);
+			}
+
+		})
 	}
+
 
 
 

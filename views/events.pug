@@ -1,0 +1,27 @@
+extends layout
+
+block content
+    h1= title
+    p All my events
+
+    // Wrapper
+    #wrapper
+
+        // EVENT LIST
+        h2 Event List
+        #eventList
+            table
+                thead
+                    th Description
+                    th StartDate
+                    th EndDate
+                    th Status
+                tbody
+        // /EVENT LIST
+
+        
+
+    // /WRAPPER
+
+block additionalscripts
+  script(src='/js/events.js')

@@ -40,6 +40,7 @@ const upload = multer({ dest: path.join(__dirname, 'uploads') });
  */
 var routeHome = require('./routes/home');
 var routeUsers = require('./routes/users');
+var routeEvents = require('./routes/events');
 var userController = require('./routes/user');
 var apiController = require('./routes/api');
 var contactController = require('./routes/contact');
@@ -147,6 +148,7 @@ app.use(function (req, res, next) {
 //App routes
 app.use('/', routeHome);
 app.use('/users', routeUsers);
+app.use('/events', routeEvents);
 
 /**
  * Primary app routes.
