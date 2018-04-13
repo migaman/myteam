@@ -265,13 +265,15 @@ module.exports = {
 	},
 
 	selectAppointment: function (idaccount, cb) {
-		var sql = `SELECT a.idappointment, a.startdate, a.enddate, a.description, pa.idparticipationstatus
-			FROM mt_appointment a
-			LEFT OUTER JOIN mt_playerappointment pa ON a.idappointment = pa.idappointment
-			LEFT OUTER JOIN mt_player pla ON pa.idplayer = pla.idplayer
-			LEFT OUTER JOIN mt_account acc ON pla.idaccount = acc.idaccount
-			WHERE acc.idaccount = $1`;
-
+		var sql = `SELECT 
+						a.idappointment
+						, a.startdate
+						, a.enddate
+						, a.description
+						, pa.idparticipationstatus
+				  	FROM mt_appointment a
+				  	LEFT OUTER JOIN mt_player pla ON pla.idaccount = $1
+					LEFT OUTER JOIN mt_playerappointment pa ON a.idappointment = pa.idappointment AND pa.idplayer = pla.idplayer`;
 		pool.query(sql, [idaccount], (err, rs) => {
 			if (err) {
 				cb(err);

@@ -17,12 +17,23 @@ router.get('/', function (req, res) {
 
 /* GET REST Example-page. */
 router.get('/rest', function (req, res) {
-	res.render('rest', { title: 'Rest Examples' });
+	if (req.isAuthenticated()) {
+		res.render('rest', { title: 'Rest Examples' });
+	}
+	else {
+		res.redirect('/login');
+	}
 });
 
 /* GET list of events page */
 router.get('/events', function (req, res) {
-	res.render('events', { title: 'Events' });
+	if (req.isAuthenticated()) {
+		res.render('events', { title: 'Events' });
+	}
+	else {
+		res.redirect('/login');
+	}
+
 });
 
 

@@ -147,8 +147,8 @@ app.use(function (req, res, next) {
 
 //App routes
 app.use('/', routeHome);
-app.use('/users', routeUsers);
-app.use('/events', routeEvents);
+app.use('/users', passportConfig.isAuthenticated, routeUsers);
+app.use('/events', passportConfig.isAuthenticated, routeEvents);
 
 /**
  * Primary app routes.
