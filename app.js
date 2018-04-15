@@ -38,9 +38,10 @@ const upload = multer({ dest: path.join(__dirname, 'uploads') });
 /**
  * Controllers (route handlers).
  */
+var routeAPIUsers = require('./routes/api/users');
+var routeAPIEvents = require('./routes/api/events');
+
 var routeHome = require('./routes/home');
-var routeUsers = require('./routes/users');
-var routeEvents = require('./routes/events');
 var userController = require('./routes/user');
 var apiController = require('./routes/api');
 var contactController = require('./routes/contact');
@@ -105,10 +106,10 @@ app.use((req, res, next) => {
 	if (req.path === '/api/upload') {
 		next();
 	}
-	else if (req.path.startsWith('/users/deleteuser')) {
+	else if (req.path.startsWith('/api/users/deleteuser')) {
 		next();
 	}
-	else if (req.path.startsWith('/users/adduser')) {
+	else if (req.path.startsWith('/api/users/adduser')) {
 		next();
 	}
 	else {
@@ -147,8 +148,8 @@ app.use(function (req, res, next) {
 
 //App routes
 app.use('/', routeHome);
-app.use('/users', passportConfig.isAuthenticated, routeUsers);
-app.use('/events', passportConfig.isAuthenticated, routeEvents);
+app.use('/api/users', passportConfig.isAuthenticated, routeAPIUsers);
+app.use('/api/events', passportConfig.isAuthenticated, routeAPIEvents);
 
 /**
  * Primary app routes.

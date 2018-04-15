@@ -24,7 +24,7 @@ function populateTable() {
 	var statusEnum = Object.freeze({ "yes": 1, "no": 2, "maybe": 3 })
 
 	// jQuery AJAX call for JSON
-	$.getJSON('/events/eventlist', function (data) {
+	$.getJSON('/api/events/eventlist', function (data) {
 
 		// Stick our user data array into a userlist variable in the global object
 		eventListData = data;

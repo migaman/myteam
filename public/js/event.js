@@ -20,7 +20,7 @@ function populateTable(idevent) {
 	//read parameter idappointment
 
 	// jQuery AJAX call for JSON
-	$.getJSON('/events/' + idevent, function (data) {
+	$.getJSON('/api/events/' + idevent, function (data) {
 
 		// For each item in our JSON, add a table row and cells to the content string
 		$.each(data, function () {
