@@ -5,8 +5,8 @@ const url = require('url')
 
 const params = url.parse(process.env.DATABASE_URL);
 const auth = params.auth.split(':');
-var User = require.main.require('../models/User');
-var appointment = require.main.require('../models/appointment');
+var usermodel = require.main.require('../models/usermodel');
+var appointmentmodel = require.main.require('../models/appointmentmodel');
 var eventmodel = require.main.require('../models/eventmodel');
 
 //pg-pool doesn't acceppt database_url: https://github.com/brianc/node-pg-pool
@@ -35,7 +35,7 @@ module.exports = {
 				var user = null;
 
 				if (rs.rowCount) {
-					user = new User();
+					user = new usermodel();
 					user.idaccount = rs.rows[0].idaccount;
 					user.email = rs.rows[0].email;
 					user.password = rs.rows[0].password;
@@ -57,7 +57,7 @@ module.exports = {
 				var user = null;
 
 				if (rs.rowCount) {
-					user = new User();
+					user = new usermodel();
 					user.idaccount = rs.rows[0].idaccount;
 					user.email = rs.rows[0].email;
 					user.password = rs.rows[0].password;
@@ -82,7 +82,7 @@ module.exports = {
 				var user = null;
 
 				if (rs.rowCount) {
-					user = new User();
+					user = new usermodel();
 					user.idaccount = rs.rows[0].idaccount;
 					user.email = rs.rows[0].email;
 					user.password = rs.rows[0].password;
@@ -108,7 +108,7 @@ module.exports = {
 				var user = null;
 
 				if (rs.rowCount) {
-					user = new User();
+					user = new usermodel();
 					user.idaccount = rs.rows[0].idaccount;
 					user.email = rs.rows[0].email;
 					user.password = rs.rows[0].password;
@@ -283,7 +283,7 @@ module.exports = {
 				var appointments = [];
 				if (rs.rowCount) {
 					for (var i = 0; i < rs.rowCount; i++) {
-						var app = new appointment();
+						var app = new appointmentmodel();
 						app.idappointment = rs.rows[i].idappointment;
 						app.startdate = rs.rows[i].startdate;
 						app.enddate = rs.rows[i].enddate;

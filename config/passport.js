@@ -5,7 +5,7 @@ const LocalStrategy = require('passport-local').Strategy;
 const GitHubStrategy = require('passport-github').Strategy;
 
 const bcrypt = require('bcrypt-nodejs');
-var User = require.main.require('../models/User');
+var usermodel = require.main.require('../models/usermodel');
 var db = require('./../db');
 
 passport.serializeUser((user, done) => {
@@ -129,7 +129,7 @@ passport.use(new GitHubStrategy({
 					req.flash('errors', { msg: 'There is already an account using this email address. Sign in to that account and link it with GitHub manually from Account Settings.' });
 					done(err);
 				} else {
-					var user = new User();
+					var user = new usermodel();
 					user.email = profile._json.email;
 					user.github = profile.id;
 					user.githubaccesstoken = accessToken;

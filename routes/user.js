@@ -3,7 +3,7 @@
 const crypto = (require('crypto'));
 const nodemailer = require('nodemailer');
 const passport = require('passport');
-const User = require('../models/User');
+const usermodel = require('../models/usermodel');
 var db = require('./../db');
 
 /**
@@ -103,7 +103,7 @@ exports.postSignup = (req, res, next) => {
 			return res.redirect('/signup');
 		}
 		else {
-			user = new User();
+			user = new usermodel();
 			user.generatePasswordHash(password, (err, hash) => {
 				if (err) {
 					return next(err);
@@ -114,7 +114,7 @@ exports.postSignup = (req, res, next) => {
 						return next(err);
 					}
 
-					var user = new User({
+					var user = new usermodel({
 						idaccount: idaccount,
 						email: req.body.email,
 						password: req.body.password

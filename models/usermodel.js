@@ -6,7 +6,7 @@ var schemaObject = require('schema-object');
 
 
 // Create User schema 
-var User = new schemaObject({
+var usermodel = new schemaObject({
 	idaccount: Number,
 	email: String,
 	password: String,
@@ -82,4 +82,4 @@ var User = new schemaObject({
 
 
 
-module.exports = User;
+module.exports = usermodel;

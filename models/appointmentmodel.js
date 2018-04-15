@@ -3,8 +3,8 @@
 var schemaObject = require('schema-object');
 
 
-// Create User schema 
-var appointment = new schemaObject({
+// Create appointment schema 
+var appointmentmodel = new schemaObject({
 	idappointment: String,
 	startdate: Date,
 	enddate: Date,
@@ -13,4 +13,4 @@ var appointment = new schemaObject({
 });
 
 
-module.exports = appointment;
+module.exports = appointmentmodel;
