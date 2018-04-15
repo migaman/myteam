@@ -6,7 +6,8 @@ const url = require('url')
 const params = url.parse(process.env.DATABASE_URL);
 const auth = params.auth.split(':');
 var User = require.main.require('../models/User');
-var Appointment = require.main.require('../models/Appointment');
+var appointment = require.main.require('../models/appointment');
+var eventmodel = require.main.require('../models/eventmodel');
 
 //pg-pool doesn't acceppt database_url: https://github.com/brianc/node-pg-pool
 const config = {
@@ -264,7 +265,7 @@ module.exports = {
 		})
 	},
 
-	selectAppointment: function (idaccount, cb) {
+	selectEvents: function (idaccount, cb) {
 		var sql = `SELECT 
 						a.idappointment
 						, a.startdate
@@ -279,23 +280,63 @@ module.exports = {
 				cb(err);
 			}
 			else {
-				var appointment = null;
-
+				var appointments = [];
 				if (rs.rowCount) {
-					var appointments = [];
 					for (var i = 0; i < rs.rowCount; i++) {
-						appointment = new Appointment();
-						appointment.idappointment = rs.rows[i].idappointment;
-						appointment.startdate = rs.rows[i].startdate;
-						appointment.enddate = rs.rows[i].enddate;
-						appointment.description = rs.rows[i].description;
-						appointment.status = rs.rows[i].idparticipationstatus;
-						appointments.push(appointment);
+						var app = new appointment();
+						app.idappointment = rs.rows[i].idappointment;
+						app.startdate = rs.rows[i].startdate;
+						app.enddate = rs.rows[i].enddate;
+						app.description = rs.rows[i].description;
+						app.status = rs.rows[i].idparticipationstatus;
+						appointments.push(app);
 					}
 
 				}
 
 				cb(err, appointments);
+			}
+
+		})
+	},
+
+	selectEvent: function (idevent, cb) {
+		var sql = `SELECT 
+						a.idappointment
+						, a.startdate
+						, a.enddate
+						, a.description
+						, pla.idplayer
+						, pla.firstname
+						, pla.lastname
+						, pa.idparticipationstatus
+					FROM mt_appointment a
+					CROSS JOIN mt_player pla
+					LEFT OUTER JOIN mt_playerappointment pa ON a.idappointment = pa.idappointment AND pa.idplayer = pla.idplayer
+					WHERE a.idappointment = $1;`;
+		pool.query(sql, [idevent], (err, rs) => {
+			if (err) {
+				cb(err);
+			}
+			else {
+				var eventmodels = [];
+				if (rs.rowCount) {
+					for (var i = 0; i < rs.rowCount; i++) {
+						var event = new eventmodel();
+						event.idappointment = rs.rows[i].idappointment;
+						event.startdate = rs.rows[i].startdate;
+						event.enddate = rs.rows[i].enddate;
+						event.description = rs.rows[i].description;
+						event.idplayer = rs.rows[i].idplayer;
+						event.firstname = rs.rows[i].firstname;
+						event.lastname = rs.rows[i].lastname;
+						event.status = rs.rows[i].idparticipationstatus;
+						eventmodels.push(event);
+					}
+
+				}
+
+				cb(err, eventmodels);
 			}
 
 		})

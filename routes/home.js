@@ -36,5 +36,16 @@ router.get('/events', function (req, res) {
 
 });
 
+/* GET list of event page */
+router.get('/event', function (req, res) {
+	if (req.isAuthenticated()) {
+		res.render('event', { title: 'Event', idevent: req.query.idevent });
+	}
+	else {
+		res.redirect('/login');
+	}
+
+});
+
 
 module.exports = router;
