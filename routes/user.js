@@ -234,7 +234,7 @@ exports.postDeleteAccount = (req, res, next) => {
  */
 exports.getOauthUnlink = (req, res, next) => {
 	const provider = req.params.provider;
-	User.findById(req.user.idaccount, (err, user) => {
+	usermodel.findById(req.user.idaccount, (err, user) => {
 		if (err) { return next(err); }
 		user[provider] = undefined;
 		user.tokens = user.tokens.filter(token => token.kind !== provider);
