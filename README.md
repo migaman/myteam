@@ -11,6 +11,15 @@ Example Node.js project built on [hackathon-starter boilerplate](https://github.
 ## Live Demo
 https://myteams.herokuapp.com
 
+## Run locally with npm
+- Clone the repo: `git clone https://github.com/migaman/myteam.git`
+- Create a new postgres database, i.e. myteam
+- Execute d-postgresql/init.sql on the new database
+- Configure environment variables (at least PORT and DATABASE_URL) in .env.example
+- Rename .env.example to .env
+- Run npm start
+
+
 ## Run locally with Docker
 - Clone the repo: `git clone https://github.com/migaman/myteam.git`
 - Build and run the app: `docker-compose up`
