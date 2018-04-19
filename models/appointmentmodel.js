@@ -5,11 +5,11 @@ var schemaObject = require('schema-object');
 
 // Create appointment schema 
 var appointmentmodel = new schemaObject({
-	idappointment: String,
-	startdate: Date,
-	enddate: Date,
-	description: String,
-	status: Number
+    idappointment: String,
+    startdate: Date,
+    enddate: Date,
+    description: String,
+    status: Number,
 });
 
 

@@ -1,0 +1,30 @@
+extends layout
+
+block content
+    h1= title
+    p All my players
+
+    // New Player
+    div(class="container")
+      div(class="row")
+        div(class="col-sm")
+        a(href="/player/add")
+          button.btn.btn.btn-primary
+           i.fa.fa-user-plus
+           | Add Player
+    
+    // Wrapper
+    #wrapper
+
+        #playerList
+            table(class="table table-hover")
+                thead
+                    th Player Id
+                    th Firstname
+                    th Lastname
+                    th Player No
+                tbody
+    // /WRAPPER
+
+block additionalscripts
+  script(src='/js/players.js')

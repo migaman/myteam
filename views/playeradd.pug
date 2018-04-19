@@ -1,0 +1,35 @@
+extends layout
+
+block content
+    h1= title
+    p Add a new player
+
+    // New Player
+    div(class="container")
+      div(class="row")
+        div(class="col-md-12")
+          form(class="form-horizontal" method="POST" action="/users/add/" id="add_new_user_form")
+            input(type='hidden', name='_csrf', value=_csrf)
+            .form-group
+              label.col-sm-3.control-label(for='email') Firstname
+              .col-sm-7
+                input.form-control(type='email', name='email', id='email', value=user.email)
+            .form-group
+              label.col-sm-3.control-label(for='email') Lastname
+              .col-sm-7
+                input.form-control(type='email', name='email', id='email', value=user.email)
+            .form-group
+              label.col-sm-3.control-label(for='email') Player No
+              .col-sm-7
+                input.form-control(type='email', name='email', id='email', value=user.email)
+            .form-group
+              .col-sm-offset-3.col-sm-4
+                button.btn.btn.btn-primary(type='submit')
+                  i.fa.fa-user-plus
+                  | Add Player
+            
+           
+
+
+block additionalscripts
+  script(src='/js/players.js')

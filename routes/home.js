@@ -36,6 +36,30 @@ router.get('/events', function (req, res) {
 
 });
 
+
+/* GET list of events page */
+router.get('/players', function (req, res) {
+	if (req.isAuthenticated()) {
+		res.render('players', { title: 'Players' });
+	}
+	else {
+		res.redirect('/login');
+	}
+
+});
+
+
+/* GET list of events page */
+router.get('/player/add', function (req, res) {
+	if (req.isAuthenticated()) {
+		res.render('playeradd', { title: 'Add Player' });
+	}
+	else {
+		res.redirect('/login');
+	}
+
+});
+
 /* GET list of event page */
 router.get('/event', function (req, res) {
 	if (req.isAuthenticated()) {
