@@ -79,7 +79,9 @@ app.use(logger('dev'));
 // setup the logger
 app.use(log4js.connectLogger(log4js.getLogger("http"), { level: 'debug' }));
 
+//body-parser extract the entire body portion of an incoming request stream and exposes it on req.body
 app.use(bodyParser.json());
+//With extended true it is possible to post "nested objects"
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(expressValidator());
 

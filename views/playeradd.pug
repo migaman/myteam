@@ -8,20 +8,20 @@ block content
     div(class="container")
       div(class="row")
         div(class="col-md-12")
-          form(class="form-horizontal" method="POST" action="/users/add/" id="add_new_user_form")
+          form(class="form-horizontal" method="POST" action="/api/players/addplayer/" id="add_new_player_form")
             input(type='hidden', name='_csrf', value=_csrf)
             .form-group
-              label.col-sm-3.control-label(for='email') Firstname
+              label.col-sm-3.control-label(for='firstname') Firstname
               .col-sm-7
-                input.form-control(type='email', name='email', id='email', value=user.email)
+                input.form-control(type='text', name='firstname', id='firstname')
             .form-group
-              label.col-sm-3.control-label(for='email') Lastname
+              label.col-sm-3.control-label(for='lastname') Lastname
               .col-sm-7
-                input.form-control(type='email', name='email', id='email', value=user.email)
+                input.form-control(type='text', name='lastname', id='lastname')
             .form-group
-              label.col-sm-3.control-label(for='email') Player No
+              label.col-sm-3.control-label(for='playerno') Player No
               .col-sm-7
-                input.form-control(type='email', name='email', id='email', value=user.email)
+                input.form-control(type='text', name='playerno', id='playerno')
             .form-group
               .col-sm-offset-3.col-sm-4
                 button.btn.btn.btn-primary(type='submit')

@@ -29,7 +29,7 @@ router.post('/adduser', function (req, res) {
 
 	db.insertUserAccount(email, hash, (err, idaccount) => {
 		if (err) throw err;
-		log.debug("Insert Example erfolgreich, neue id: " + idaccount);
+		log.debug("Insert Example successful, new account id: " + idaccount);
 		res.send({ msg: '' });
 	});
 });
