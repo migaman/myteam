@@ -40,6 +40,48 @@ function populateTable(idevent) {
 				//status not defined yet
 				tableContent += '<td><span class="label label-pill label-default">?</span></td>';
 			}
+
+			tableContent += '<td>';
+			tableContent += '<div class="btn-group">';
+			/*
+			tableContent += '<button type="button" class="btn">Yes</button>';
+			tableContent += '<button type="button" class="btn">Maybe</button>';
+			tableContent += '<button type="button" class="btn">No</button>';
+			*/
+
+
+			if (this.status === statusEnum.yes) {
+				tableContent += '<button type="button" class="btn btn-success">Yes</button>';
+				tableContent += '<button type="button" class="btn">Maybe</button>';
+				tableContent += '<button type="button" class="btn">No</button>';
+			}
+			else if (this.status === statusEnum.no) {
+				tableContent += '<button type="button" class="btn">Yes</button>';
+				tableContent += '<button type="button" class="btn">Maybe</button>';
+				tableContent += '<button type="button" class="btn btn-danger">No</button>';
+			}
+			else if (this.status === statusEnum.maybe) {
+				tableContent += '<button type="button" class="btn">Yes</button>';
+				tableContent += '<button type="button" class="btn btn-warning">Maybe</button>';
+				tableContent += '<button type="button" class="btn">No</button>';
+			}
+			else {
+				tableContent += '<button type="button" class="btn">Yes</button>';
+				tableContent += '<button type="button" class="btn">Maybe</button>';
+				tableContent += '<button type="button" class="btn">No</button>';
+			}
+
+
+
+			/*
+			tableContent += '<button type="button" class="btn btn-success">Yes</button>';
+			tableContent += '<button type="button" class="btn btn-warning">Maybe</button>';
+			tableContent += '<button type="button" class="btn btn-danger">No</button>';
+			*/
+			tableContent += '</div >';
+			tableContent += '</td>';
+
+
 			tableContent += '</tr>';
 
 		});
