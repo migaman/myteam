@@ -20,6 +20,21 @@
   background-image: linear-gradient(to bottom, #ffffff 60%, #f8f8f8 100%);
 }
 
+.btn_green.active {
+  color: #fff;
+  background-color: #60bf60;
+}
+
+.btn_red.active {
+  color: #fff;
+  background-color: #de4b33;
+}
+
+.btn_orange.active {
+  color: #fff;
+  background-color: #ff9800;
+}
+
 // Forms
 // -------------------------
 

@@ -35,19 +35,45 @@ function populateTable() {
 			tableContent += '<td><a href="/event?idevent=' + this.idappointment + '" rel="' + this.idappointment + '">' + this.description + '</a></td>';
 			tableContent += '<td>' + this.startdate.replace('T', ' ').substr(0, 19) + '</td>';
 			tableContent += '<td>' + this.enddate.replace('T', ' ').substr(0, 19) + '</td>';
+
+
+			var stateYes = 'value="0"';
+			var activeYes = '';
+			var stateMaybe = 'value="0"';
+			var activeMaybe = '';
+			var stateNo = 'value="0"';
+			var activeNo = '';
+
 			if (this.status === statusEnum.yes) {
-				tableContent += '<td><span class="label label-pill label-success">YES</span></td>';
-			}
-			else if (this.status === statusEnum.no) {
-				tableContent += '<td><span class="label label-pill label-danger">NO</span></td>';
+				stateYes = 'checked="checked" value="1"';
+				activeYes = "active";
 			}
 			else if (this.status === statusEnum.maybe) {
-				tableContent += '<td><span class="label label-pill label-warning">MAYBE</span></td>';
+				stateMaybe = 'checked="checked" value="1"';
+				activeMaybe = "active";
 			}
-			else {
-				//status not defined yet
-				tableContent += '<td><span class="label label-pill label-default">?</span></td>';
+			else if (this.status === statusEnum.no) {
+				stateNo = 'checked="checked" value="1"';
+				activeNo = "active";
 			}
+
+			tableContent += `<td>
+							<div class="btn-group" data-toggle="buttons">
+								
+								<label class="btn btn_green ` + activeYes + `" >
+									<input ` + stateYes + ` type="radio"> Yes
+								</label>
+								<label class="btn btn_orange ` + activeMaybe + `">
+									<input ` + stateMaybe + ` type="radio"> Maybe
+								</label>
+								<label class="btn btn_red ` + activeNo + `">
+									<input ` + stateNo + ` type="radio"> No
+								</label>
+
+							</div>
+						</td>`;
+			tableContent += '</tr>';
+
 
 			tableContent += '</tr>';
 

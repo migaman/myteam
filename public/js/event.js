@@ -27,61 +27,42 @@ function populateTable(idevent) {
 			tableContent += '<tr>';
 			tableContent += '<td>' + this.firstname + '</td>';
 			tableContent += '<td>' + this.lastname + '</td>';
-			if (this.status === statusEnum.yes) {
-				tableContent += '<td><span class="label label-pill label-success">YES</span></td>';
-			}
-			else if (this.status === statusEnum.no) {
-				tableContent += '<td><span class="label label-pill label-danger">NO</span></td>';
-			}
-			else if (this.status === statusEnum.maybe) {
-				tableContent += '<td><span class="label label-pill label-warning">MAYBE</span></td>';
-			}
-			else {
-				//status not defined yet
-				tableContent += '<td><span class="label label-pill label-default">?</span></td>';
-			}
 
-			tableContent += '<td>';
-			tableContent += '<div class="btn-group">';
-			/*
-			tableContent += '<button type="button" class="btn">Yes</button>';
-			tableContent += '<button type="button" class="btn">Maybe</button>';
-			tableContent += '<button type="button" class="btn">No</button>';
-			*/
-
+			var stateYes = 'value="0"';
+			var activeYes = '';
+			var stateMaybe = 'value="0"';
+			var activeMaybe = '';
+			var stateNo = 'value="0"';
+			var activeNo = '';
 
 			if (this.status === statusEnum.yes) {
-				tableContent += '<button type="button" class="btn btn-success">Yes</button>';
-				tableContent += '<button type="button" class="btn">Maybe</button>';
-				tableContent += '<button type="button" class="btn">No</button>';
-			}
-			else if (this.status === statusEnum.no) {
-				tableContent += '<button type="button" class="btn">Yes</button>';
-				tableContent += '<button type="button" class="btn">Maybe</button>';
-				tableContent += '<button type="button" class="btn btn-danger">No</button>';
+				stateYes = 'checked="checked" value="1"';
+				activeYes = "active";
 			}
 			else if (this.status === statusEnum.maybe) {
-				tableContent += '<button type="button" class="btn">Yes</button>';
-				tableContent += '<button type="button" class="btn btn-warning">Maybe</button>';
-				tableContent += '<button type="button" class="btn">No</button>';
+				stateMaybe = 'checked="checked" value="1"';
+				activeMaybe = "active";
 			}
-			else {
-				tableContent += '<button type="button" class="btn">Yes</button>';
-				tableContent += '<button type="button" class="btn">Maybe</button>';
-				tableContent += '<button type="button" class="btn">No</button>';
+			else if (this.status === statusEnum.no) {
+				stateNo = 'checked="checked" value="1"';
+				activeNo = "active";
 			}
 
+			tableContent += `<td>
+							<div class="btn-group" data-toggle="buttons">
+								
+								<label class="btn btn_green ` + activeYes + `" >
+									<input ` + stateYes + ` type="radio"> Yes
+								</label>
+								<label class="btn btn_orange ` + activeMaybe + `">
+									<input ` + stateMaybe + ` type="radio"> Maybe
+								</label>
+								<label class="btn btn_red ` + activeNo + `">
+									<input ` + stateNo + ` type="radio"> No
+								</label>
 
-
-			/*
-			tableContent += '<button type="button" class="btn btn-success">Yes</button>';
-			tableContent += '<button type="button" class="btn btn-warning">Maybe</button>';
-			tableContent += '<button type="button" class="btn btn-danger">No</button>';
-			*/
-			tableContent += '</div >';
-			tableContent += '</td>';
-
-
+							</div>
+						</td>`;
 			tableContent += '</tr>';
 
 		});

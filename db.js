@@ -275,7 +275,8 @@ module.exports = {
 						, pa.idparticipationstatus
 				  	FROM mt_appointment a
 				  	LEFT OUTER JOIN mt_player pla ON pla.idaccount = $1
-					LEFT OUTER JOIN mt_playerappointment pa ON a.idappointment = pa.idappointment AND pa.idplayer = pla.idplayer`;
+					LEFT OUTER JOIN mt_playerappointment pa ON a.idappointment = pa.idappointment AND pa.idplayer = pla.idplayer
+					ORDER BY a.startdate`;
 		pool.query(sql, [idaccount], (err, rs) => {
 			if (err) {
 				cb(err);
