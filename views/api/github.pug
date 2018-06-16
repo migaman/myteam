@@ -2,18 +2,18 @@ extends ../layout
 
 block content
   h2
-    i.fa.fa-github
+    i.fas.fa-github
     | GitHub API
 
   .btn-group.btn-group-justified
     a.btn.btn-primary(href='http://developer.github.com/guides/getting-started/', target='_blank')
-      i.fa.fa-check-square-o
+      i.fas.fa-check-square-o
       | Getting Started
     a.btn.btn-primary(href='https://apigee.com/console/github', target='_blank')
-      i.fa.fa-laptop
+      i.fas.fa-laptop
       | API Console
     a.btn.btn-primary(href='http://developer.github.com/v3/', target='_blank')
-      i.fa.fa-file-text-o
+      i.fas.fa-file-text-o
       | Documentation
   br
   .panel.panel-primary
@@ -28,16 +28,16 @@ block content
             a(href='#{repo.html_url}') #{repo.name}
           ul.list-inline
             li
-              i.fa.fa-eye-slash
+              i.fas.fa-eye-slash
               | Subscribers: #{repo.subscribers_count}
             li
-              i.fa.fa-star
+              i.fas.fa-star
               | Starred: #{repo.stargazers_count}
             li
-              i.fa.fa-code-fork
+              i.fas.fa-code-fork
               | Forks: #{repo.forks_count}
             li
-              i.fa.fa-code
+              i.fas.fa-code
               | #{repo.language}
           strong DESCRIPTION
           p= repo.description
